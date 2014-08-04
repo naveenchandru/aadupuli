@@ -793,10 +793,9 @@ namespace GoatTiger
                                     {
                                         
                                   
-                                        if (!BoardHistory.isRepeated(newValues))
-                                        {
+                                        
                                             yield return new Board(newValues, !mTurnForPlayer, mGoatsIntoBoard);
-                                        }
+                                        
                                     }
                                 }
 
