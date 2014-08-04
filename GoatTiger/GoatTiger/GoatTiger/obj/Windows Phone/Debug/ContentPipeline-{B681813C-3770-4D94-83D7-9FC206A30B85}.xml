@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>tigerpuck.png</Source>
+      <Name>tigerpuck</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\tigerpuck.xnb</Output>
+      <Time>2014-07-16T23:37:37.203285+05:30</Time>
+    </Item>
+    <Item>
+      <Source>goatpuck.png</Source>
+      <Name>goatpuck</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\goatpuck.xnb</Output>
+      <Time>2014-07-16T23:37:36.0206429+05:30</Time>
+    </Item>
+    <Item>
+      <Source>nonepuck.png</Source>
+      <Name>nonepuck</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\nonepuck.xnb</Output>
+      <Time>2014-05-12T23:36:20.4328964+05:30</Time>
+    </Item>
+    <Item>
+      <Source>layout.png</Source>
+      <Name>layout</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\layout.xnb</Output>
+      <Time>2014-07-16T23:46:36.1691811+05:30</Time>
+    </Item>
+    <Item>
+      <Source>lines1.png</Source>
+      <Name>lines1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\lines1.xnb</Output>
+      <Time>2014-07-27T19:55:32.486897+05:30</Time>
+    </Item>
+    <Item>
+      <Source>none.png</Source>
+      <Name>none</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\none.xnb</Output>
+      <Time>2014-07-27T20:57:38.0730202+05:30</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <ContentProjectGUID>{B681813C-3770-4D94-83D7-9FC206A30B85}</ContentProjectGUID>
+      <TargetPlatform>WindowsPhone</TargetPlatform>
+      <TargetProfile>Reach</TargetProfile>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>F:\Github-repo\GoatTiger\GoatTiger\GoatTigerContent\</RootDirectory>
+      <LoggerRootDirectory>F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\</LoggerRootDirectory>
+      <IntermediateDirectory>F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\</IntermediateDirectory>
+      <OutputDirectory>F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2012-09-06T14:52:54+05:30</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Value>2012-09-06T14:52:54+05:30</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2012-09-06T14:52:54+05:30</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2012-09-06T14:52:54+05:30</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2012-09-06T14:52:54+05:30</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2012-09-06T14:52:54+05:30</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2014-04-05T23:29:58.6345132+05:30</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>

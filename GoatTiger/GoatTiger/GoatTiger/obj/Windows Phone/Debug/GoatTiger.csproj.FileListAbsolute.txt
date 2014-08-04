@@ -1,0 +1,35 @@
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.dll
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.pdb
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\GoatTiger.csprojResolveAssemblyReference.cache
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\GoatTiger.dll
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\GoatTiger.pdb
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\AppManifest.xaml
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\WMAppManifest.xml.g
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\WMAppManifest.xml
+bin\Windows Phone\Debug\
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.xap
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\XapCacheFile.xml
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\tigerpuck.xnb
+C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\goatpuck.xnb
+C:\Users\Naveen\documents\visual studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\nonepuck.xnb
+C:\Users\Naveen\documents\visual studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\layout.xnb
+C:\Users\Naveen\documents\visual studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\lines1.xnb
+C:\Users\Naveen\documents\visual studio 2012\Projects\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\none.xnb
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\tigerpuck.xnb
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\goatpuck.xnb
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\nonepuck.xnb
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\layout.xnb
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\lines1.xnb
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\none.xnb
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.dll
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.pdb
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\GoatTiger.csprojResolveAssemblyReference.cache
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\GoatTiger.dll
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\GoatTiger.pdb
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\AppManifest.xaml
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\WMAppManifest.xml.g
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\WMAppManifest.xml
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.xap
+F:\Github-repo\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\XapCacheFile.xml
