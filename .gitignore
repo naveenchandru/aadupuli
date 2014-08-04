@@ -180,3 +180,12 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+GoatTiger/GoatTiger.v11.suo
+GoatTiger/GoatTiger.v11.suo
+GoatTiger/GoatTiger/GoatTiger/bin/Windows Phone/Debug/GoatTiger.dll
+GoatTiger/GoatTiger/GoatTiger/bin/Windows Phone/Debug/GoatTiger.pdb
+GoatTiger/GoatTiger/GoatTiger/bin/Windows Phone/Debug/GoatTiger.xap
+GoatTiger/GoatTiger/GoatTiger/obj/Windows Phone/Debug/ContentPipeline-{B681813C-3770-4D94-83D7-9FC206A30B85}.xml
+GoatTiger/GoatTiger/GoatTiger/obj/Windows Phone/Debug/GoatTiger.csproj.FileListAbsolute.txt
+GoatTiger/GoatTiger/GoatTiger/obj/Windows Phone/Debug/XapCacheFile.xml
+GoatTiger/GoatTiger/GoatTiger/obj/Windows Phone/Debug/GoatTiger.dll
