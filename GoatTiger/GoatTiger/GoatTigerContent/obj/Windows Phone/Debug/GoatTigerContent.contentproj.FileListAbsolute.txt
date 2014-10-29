@@ -1,2 +1,3 @@
 C:\Users\Naveen\Documents\Visual Studio 2012\Projects\GoatTiger\GoatTiger\GoatTigerContent\obj\Windows Phone\Debug\GoatTigerContent.contentprojResolveAssemblyReference.cache
 F:\Github-repo\GoatTiger\GoatTiger\GoatTigerContent\obj\Windows Phone\Debug\GoatTigerContent.contentprojResolveAssemblyReference.cache
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTigerContent\obj\Windows Phone\Debug\GoatTigerContent.contentprojResolveAssemblyReference.cache

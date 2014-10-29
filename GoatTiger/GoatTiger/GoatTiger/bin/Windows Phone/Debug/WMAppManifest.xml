@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
   <App xmlns="" ProductID="{f1758399-228f-482c-bea8-ead06bb958bf}" Title="GoatTiger" RuntimeType="XNA" Version="1.0.0.0" Genre="Apps.Normal" Author="" Description="" Publisher="">
-    <IconPath IsRelative="true" IsResource="false">PhoneGameThumb.png</IconPath>
+    <IconPath IsRelative="true" IsResource="false">GoatTilesBackground.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
       <Capability Name="ID_CAP_LOCATION" />
@@ -25,7 +25,7 @@
     <Tokens>
       <PrimaryToken TokenID="GoatTigerToken" TaskName="_default">
         <TemplateType5>
-          <BackgroundImageURI IsRelative="true" IsResource="false">Background.png</BackgroundImageURI>
+          <BackgroundImageURI IsRelative="true" IsResource="false">GoatTilesBackground.png</BackgroundImageURI>
           <Count>0</Count>
           <Title>GoatTiger</Title>
         </TemplateType5>

@@ -19,6 +19,7 @@ namespace GoatTiger
 
     enum nodeState { none, goat, tiger };
     enum gameMode { twoPlayers, vsTiger, vsGoat };
+    enum gameScreens { mainMenuScreen, gamePlayScreen, chooseSideOverlay,winnersOverlay,helpScreen };
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -31,6 +32,10 @@ namespace GoatTiger
         Texture2D goatpuck;
         Texture2D nonepuck;
         Texture2D boardtexture;
+        Texture2D mainMenuBackground;
+
+        GameState gameState;
+
         int screenWidth;
         int screenHeight;
 
@@ -40,6 +45,13 @@ namespace GoatTiger
         Point touchedPos;
         gameMode currentMode;
         bool touching;
+        gameScreens currentScreen;
+
+        bool twoPlayerBtnTouched;
+        gButton twoPlayerBtn;
+        gButton onePlayerBtnGoat;
+        gButton onePlayerBtnTiger;
+        gButton undoBtn;
 
         //history
         BoardHistory boardHistory = new BoardHistory();
@@ -76,10 +88,22 @@ namespace GoatTiger
 
             initPosition();
             currentBoard = new Board(grid, false, currentGoatsIntoBoard);
+            gameState = new GameState();
+
             winner = nodeState.none;
             puckTouched = false;
-            //currentMode = gameMode.vsTiger;
-            currentMode = gameMode.vsGoat;
+            currentMode = gameMode.vsTiger;
+            currentScreen = gameScreens.mainMenuScreen;
+            //currentMode = gameMode.vsGoat;
+
+            onePlayerBtnGoat = new gButton(430, 120);
+            onePlayerBtnTiger = new gButton(410, 220);
+            twoPlayerBtn = new gButton(390,320);
+            undoBtn = new gButton(600, 350);
+            
+            
+            
+
             base.Initialize();
         }
 
@@ -134,7 +158,16 @@ namespace GoatTiger
             tigerpuck = Content.Load<Texture2D>("tigerpuck");
             goatpuck = Content.Load<Texture2D>("goatpuck");
             nonepuck = Content.Load<Texture2D>("none");
-            boardtexture = Content.Load<Texture2D>("lines1");
+            boardtexture = Content.Load<Texture2D>("GamePlayBoard");
+            mainMenuBackground = Content.Load<Texture2D>("mainmenuscreen");
+
+            twoPlayerBtn.load("twoPlayerBtnShow", "twoPlayerBtnPressed", Content);
+            onePlayerBtnGoat.load("asGoatBtnShow", "asGoatBtnPressed", Content);
+            onePlayerBtnTiger.load("asTigerBtnShow", "asTigerBtnPressed", Content);
+            undoBtn.load("undoBtnShow", "undoBtnPressed", Content);
+            
+
+
             screenWidth = graphics.GraphicsDevice.PresentationParameters.BackBufferWidth;
             screenHeight = graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
 
@@ -160,9 +193,83 @@ namespace GoatTiger
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            {
+                if( currentScreen == gameScreens.mainMenuScreen)
                 this.Exit();
+                if (currentScreen == gameScreens.gamePlayScreen)
+                {
+                    currentScreen = gameScreens.mainMenuScreen;
+                }
+            }
 
-            if ( (currentMode == gameMode.vsTiger && currentBoard.mTurnForPlayer) || (currentMode == gameMode.vsGoat && !currentBoard.mTurnForPlayer))
+
+
+
+            if (currentScreen == gameScreens.mainMenuScreen)
+            {
+                mainScreenTouchHanlder();
+            }
+            else if (currentScreen == gameScreens.gamePlayScreen)
+            {
+                getInputAndUpdateGame();
+
+            }
+
+         
+            base.Update(gameTime);
+        }
+        void mainScreenTouchHanlder()
+        {
+
+            TouchCollection touches = TouchPanel.GetState();
+
+            if (/*!touching &&*/ touches.Count > 0)
+            {
+                touching = true;
+                TouchLocation touch = touches.First();
+                System.Diagnostics.Debug.WriteLine("X" + touch.Position.X + "Y" + touch.Position.Y);
+                //make a move by computer
+
+
+                // twoPlayerBtn.setPos(400,200);
+                twoPlayerBtn.handeTouch(touch);
+                onePlayerBtnGoat.handeTouch(touch);
+                onePlayerBtnTiger.handeTouch(touch);
+
+
+
+            }
+            else
+            {
+                if (twoPlayerBtn.pressed)
+                {
+                    twoPlayerBtn.pressed = false;
+                    currentMode = gameMode.twoPlayers;
+                    currentScreen = gameScreens.gamePlayScreen;
+                }
+                if (onePlayerBtnGoat.pressed)
+                {
+                    onePlayerBtnGoat.pressed = false;
+                    currentMode = gameMode.vsTiger;
+                    currentScreen = gameScreens.gamePlayScreen;
+                }
+                if (onePlayerBtnTiger.pressed)
+                {
+                    onePlayerBtnTiger.pressed = false;
+                    currentMode = gameMode.vsGoat;
+                    currentScreen = gameScreens.gamePlayScreen;
+                }
+
+
+            }
+
+               
+
+        }
+
+        void getInputAndUpdateGame()
+        {
+            if ((currentMode == gameMode.vsTiger && currentBoard.mTurnForPlayer) || (currentMode == gameMode.vsGoat && !currentBoard.mTurnForPlayer))
             {
                 System.Diagnostics.Debug.WriteLine("move by cpu: " + currentBoard.mTurnForPlayer);
 
@@ -177,7 +284,7 @@ namespace GoatTiger
                 //    {
                 //        nodeState [,] data1 = currentBoard.mValues;
                 //        nodeState[,] data2 = BoardHistory.history.ElementAt(k);
-                
+
                 //        //if (currentBoard.mValues.Equals(BoardHistory.history.ElementAt(k)))
                 //        if (data1.Rank == data2.Rank &&
                 //            Enumerable.Range(0, data1.Rank).All(dimension => data1.GetLength(dimension) == data2.GetLength(dimension)) && data1.Cast<nodeState>().SequenceEqual(data2.Cast<nodeState>())) 
@@ -189,10 +296,11 @@ namespace GoatTiger
 
 
                 Board next = currentBoard.FindNextMove(movesDepth);
-
+                gameState.positionslist.Add(currentBoard.mValues);
                 BoardHistory.history.Add(currentBoard.mValues);
                 currentBoard = next;
-                
+
+
             }
             else
             {
@@ -204,6 +312,9 @@ namespace GoatTiger
                     TouchLocation touch = touches.First();
                     System.Diagnostics.Debug.WriteLine("X" + touch.Position.X + "Y" + touch.Position.Y);
                     //make a move by computer
+
+                    undoBtn.handeTouch(touch);
+
                     if (currentBoard.mTurnForPlayer)
                         System.Diagnostics.Debug.WriteLine("moving: tiger");
                     else
@@ -221,6 +332,7 @@ namespace GoatTiger
                                 {
                                     System.Diagnostics.Debug.WriteLine("moving:" + tobemovedpos.X + tobemovedpos.Y + "puck" + grid[tobemovedpos.X, tobemovedpos.Y]);
                                     Board next = currentBoard.MakeMove(touchedPos, tobemovedpos);
+                                    gameState.positionslist.Add(currentBoard.mValues);
                                     BoardHistory.history.Add(currentBoard.mValues);
                                     currentBoard = next;
                                 }
@@ -257,7 +369,7 @@ namespace GoatTiger
 
                                             }
                                         }
-                                 
+
                                     }
                                 }
 
@@ -275,6 +387,7 @@ namespace GoatTiger
                                 {
                                     System.Diagnostics.Debug.WriteLine("moving:" + tobemovedpos.X + tobemovedpos.Y + "puck" + grid[tobemovedpos.X, tobemovedpos.Y]);
                                     Board next = currentBoard.MakeMove(touchedPos, tobemovedpos);
+                                    gameState.positionslist.Add(currentBoard.mValues);
                                     BoardHistory.history.Add(currentBoard.mValues);
                                     currentBoard = next;
                                 }
@@ -308,6 +421,7 @@ namespace GoatTiger
                                         else if (currentBoard.mGoatsIntoBoard < 15 && grid[i, j] == nodeState.none)
                                         {
                                             Board next = currentBoard.MakeMove(new Point(i, j), new Point(i, j));
+                                            gameState.positionslist.Add(currentBoard.mValues);
                                             BoardHistory.history.Add(currentBoard.mValues);
                                             currentBoard = next;
                                         }
@@ -325,17 +439,23 @@ namespace GoatTiger
                 }
                 else if (touches.Count == 0)
                 {
+                    if (undoBtn.pressed)
+                    {
+                        
+                        if (gameState.positionslist.Count != 0)
+                        {
+
+                            currentBoard.mValues = gameState.positionslist.Last();
+                            gameState.positionslist.RemoveAt(gameState.positionslist.Count - 1);
+                        }
+                    }
+                    undoBtn.pressed = false;
                     touching = false;
 
                 }
             }
 
-            
-            // TODO: Add your update logic here
-
-
             CheckForWin();
-            base.Update(gameTime);
         }
 
         Rectangle getTouchArea(Rectangle puckArea)
@@ -434,19 +554,44 @@ namespace GoatTiger
             GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
-            DrawBoard();
-            DrawPieces();
+            if (currentScreen == gameScreens.mainMenuScreen)
+            {
+                DrawMainScreen();
+            }
+            else if (currentScreen == gameScreens.gamePlayScreen)
+            {
+                DrawBoard();
+                DrawPieces();
 
 
+            }
+            
+            //todo
             spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
+        void DrawMainScreen()
+        {
+            Rectangle screenRectangle = new Rectangle(0, 0, screenWidth,screenHeight);
+            //spriteBatch.Draw(mainMenuBackground, screenRectangle, Color.White);
+            spriteBatch.Draw(mainMenuBackground, new Vector2(0, 0), Color.White);
+            twoPlayerBtn.draw(spriteBatch);
+            onePlayerBtnGoat.draw(spriteBatch);
+            onePlayerBtnTiger.draw(spriteBatch);
+            
+
+            
+
+            
+
+        }
         void DrawBoard()
         {
             Rectangle screenRectangle = new Rectangle(0, 0, boardtexture.Width,boardtexture.Height);
             spriteBatch.Draw(boardtexture, screenRectangle, Color.White);
+            undoBtn.draw(spriteBatch);
         }
 
         void DrawPieces(){
