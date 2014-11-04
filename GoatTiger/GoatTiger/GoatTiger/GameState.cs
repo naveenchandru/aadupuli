@@ -9,6 +9,7 @@ namespace GoatTiger
     {
         nodeState[,] grid;
         public List<nodeState[,]> positionslist = new List<nodeState[,]>();
+        public List<int> mGoatsIntoBoardList = new List<int>();
         void fetchSavedStateFromStorage()
         {
             //logic to get saved state

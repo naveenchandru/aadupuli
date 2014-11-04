@@ -99,11 +99,9 @@ namespace GoatTiger
             onePlayerBtnGoat = new gButton(430, 120);
             onePlayerBtnTiger = new gButton(410, 220);
             twoPlayerBtn = new gButton(390,320);
-            undoBtn = new gButton(600, 350);
+            undoBtn = new gButton(660, 370);
             
             
-            
-
             base.Initialize();
         }
 
@@ -166,11 +164,8 @@ namespace GoatTiger
             onePlayerBtnTiger.load("asTigerBtnShow", "asTigerBtnPressed", Content);
             undoBtn.load("undoBtnShow", "undoBtnPressed", Content);
             
-
-
             screenWidth = graphics.GraphicsDevice.PresentationParameters.BackBufferWidth;
             screenHeight = graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
-
 
             // TODO: use this.Content to load your game content here
         }
@@ -201,9 +196,6 @@ namespace GoatTiger
                     currentScreen = gameScreens.mainMenuScreen;
                 }
             }
-
-
-
 
             if (currentScreen == gameScreens.mainMenuScreen)
             {
@@ -236,8 +228,6 @@ namespace GoatTiger
                 onePlayerBtnGoat.handeTouch(touch);
                 onePlayerBtnTiger.handeTouch(touch);
 
-
-
             }
             else
             {
@@ -260,9 +250,7 @@ namespace GoatTiger
                     currentScreen = gameScreens.gamePlayScreen;
                 }
 
-
             }
-
                
 
         }
@@ -297,6 +285,7 @@ namespace GoatTiger
 
                 Board next = currentBoard.FindNextMove(movesDepth);
                 gameState.positionslist.Add(currentBoard.mValues);
+                gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                 BoardHistory.history.Add(currentBoard.mValues);
                 currentBoard = next;
 
@@ -333,6 +322,7 @@ namespace GoatTiger
                                     System.Diagnostics.Debug.WriteLine("moving:" + tobemovedpos.X + tobemovedpos.Y + "puck" + grid[tobemovedpos.X, tobemovedpos.Y]);
                                     Board next = currentBoard.MakeMove(touchedPos, tobemovedpos);
                                     gameState.positionslist.Add(currentBoard.mValues);
+                                    gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                                     BoardHistory.history.Add(currentBoard.mValues);
                                     currentBoard = next;
                                 }
@@ -388,6 +378,7 @@ namespace GoatTiger
                                     System.Diagnostics.Debug.WriteLine("moving:" + tobemovedpos.X + tobemovedpos.Y + "puck" + grid[tobemovedpos.X, tobemovedpos.Y]);
                                     Board next = currentBoard.MakeMove(touchedPos, tobemovedpos);
                                     gameState.positionslist.Add(currentBoard.mValues);
+                                    gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                                     BoardHistory.history.Add(currentBoard.mValues);
                                     currentBoard = next;
                                 }
@@ -422,6 +413,7 @@ namespace GoatTiger
                                         {
                                             Board next = currentBoard.MakeMove(new Point(i, j), new Point(i, j));
                                             gameState.positionslist.Add(currentBoard.mValues);
+                                            gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                                             BoardHistory.history.Add(currentBoard.mValues);
                                             currentBoard = next;
                                         }
@@ -442,11 +434,26 @@ namespace GoatTiger
                     if (undoBtn.pressed)
                     {
                         
-                        if (gameState.positionslist.Count != 0)
+                        if (gameState.positionslist.Count != 0 && !(gameState.positionslist.Count == 1 && (currentMode == gameMode.vsGoat || currentMode == gameMode.vsTiger)))
                         {
 
+
+                            if (currentMode == gameMode.vsGoat || currentMode == gameMode.vsTiger)
+                            {
+                                gameState.positionslist.RemoveAt(gameState.positionslist.Count - 1);
+                                gameState.mGoatsIntoBoardList.RemoveAt(gameState.mGoatsIntoBoardList.Count - 1);
+                            }
                             currentBoard.mValues = gameState.positionslist.Last();
                             gameState.positionslist.RemoveAt(gameState.positionslist.Count - 1);
+                            
+                            currentBoard.mGoatsIntoBoard = gameState.mGoatsIntoBoardList.Last();
+                            gameState.mGoatsIntoBoardList.RemoveAt(gameState.mGoatsIntoBoardList.Count - 1);
+
+                            if (currentMode == gameMode.twoPlayers)
+                            {
+                                currentBoard.mTurnForPlayer = !currentBoard.mTurnForPlayer;
+                            }
+
                         }
                     }
                     undoBtn.pressed = false;
