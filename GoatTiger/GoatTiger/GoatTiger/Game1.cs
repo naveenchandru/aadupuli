@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
+using System.IO.IsolatedStorage;
 
 namespace GoatTiger
 {
@@ -20,6 +21,9 @@ namespace GoatTiger
     enum nodeState { none, goat, tiger };
     enum gameMode { twoPlayers, vsTiger, vsGoat };
     enum gameScreens { mainMenuScreen, gamePlayScreen, chooseSideOverlay,winnersOverlay,helpScreen };
+
+    
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -27,19 +31,25 @@ namespace GoatTiger
         nodeState[,] grid;
         Rectangle[,] positions;
         List<Point> possiblePositions = new List<Point>();
+
+        int TOTAL_GOATS_COUNT = 15;
+        String SAVEFILENAME = "mode1";
+        int highScore = 14429;
         int currentGoatsIntoBoard;
+        int goatsCaptured;
+
         Texture2D tigerpuck;
         Texture2D goatpuck;
         Texture2D nonepuck;
         Texture2D boardtexture;
         Texture2D mainMenuBackground;
 
-        GameState gameState;
+        GameState gameState, gameStateVsGoat,gameStateVsTiger, gameStateTwoPlayer;
 
         int screenWidth;
         int screenHeight;
 
-        Board currentBoard;
+        Board currentBoard, currentBoardVsGoat, currentBoardVsTiger, currentBoardTwoPlayer;
         nodeState winner;
         bool puckTouched;
         Point touchedPos;
@@ -53,9 +63,10 @@ namespace GoatTiger
         gButton onePlayerBtnTiger;
         gButton undoBtn;
 
-        //history
-        BoardHistory boardHistory = new BoardHistory();
-        
+        SpriteFont goatsCountFont;
+        Vector2 goatsRemainTextPos,goatsCapturedTextPos;
+
+
 
         public Game1()
         {
@@ -85,10 +96,18 @@ namespace GoatTiger
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            
             initPosition();
-            currentBoard = new Board(grid, false, currentGoatsIntoBoard);
-            gameState = new GameState();
+            fetchSavedState();
+            
+            currentBoardVsGoat = new Board(grid, false, currentGoatsIntoBoard);
+            currentBoardVsTiger = new Board(grid, false, currentGoatsIntoBoard);
+            currentBoardTwoPlayer = new Board(grid, false, currentGoatsIntoBoard);
+            currentBoard = currentBoardVsGoat;
+            goatsCaptured = currentGoatsIntoBoard - getGoatCount();
+            gameStateVsGoat = new GameState();
+            gameStateVsTiger = new GameState();
+            gameStateTwoPlayer = new GameState();
 
             winner = nodeState.none;
             puckTouched = false;
@@ -103,6 +122,78 @@ namespace GoatTiger
             
             
             base.Initialize();
+        }
+        void fetchSavedState()
+        {
+            
+            // open isolated storage, and load data from the savefile if it exists.
+            #if WINDOWS_PHONE
+                        using (IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForApplication())
+            #else
+                        using (IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForDomain())
+            #endif
+            {
+                if (savegameStorage.FileExists(SAVEFILENAME))
+                {
+                    using (IsolatedStorageFileStream fs = savegameStorage.OpenFile(SAVEFILENAME, System.IO.FileMode.Open))
+                    {
+                        if (fs != null)
+                        {
+
+                            byte[] saveBytes = new byte[4];
+                            int count = 0;
+
+                            for (int i = 0; i < 5; i++)
+                            {
+                                for (int j = 0; j < 6; j++)
+                                {
+                                    count = fs.Read(saveBytes, 0, 4);
+
+                                    if (count > 0)
+                                    {
+                                        highScore = System.BitConverter.ToInt32(saveBytes, 0);
+                                        grid[i, j] = (nodeState)highScore;
+                         //               System.Diagnostics.Debug.WriteLine("high saved" + highScore);
+                                    }
+                                }
+                            }
+
+                            count = fs.Read(saveBytes, 0, 4);
+                            if (count > 0)
+                            {
+                                highScore = System.BitConverter.ToInt32(saveBytes, 0);
+                                currentGoatsIntoBoard = highScore;
+                            }
+
+                            // Reload the saved high-score data.
+                            
+                            
+                        }
+                    }
+                }
+            }
+            
+        }
+
+        void stashCurrentGame()
+        {
+            if (currentMode == gameMode.vsGoat)
+            {
+                currentBoardVsGoat = currentBoard;
+            }
+            if (currentMode == gameMode.vsTiger)
+            {
+                currentBoardVsTiger = currentBoard;
+            }
+            if (currentMode == gameMode.twoPlayers)
+            {
+                currentBoardTwoPlayer = currentBoard;
+            }
+        }
+
+        void gameSaveState()
+        {
+
         }
 
         void initPosition()
@@ -142,6 +233,7 @@ namespace GoatTiger
             //grid[1, 5] = nodeState.goat;
 
             currentGoatsIntoBoard = 0;
+            
 
         }
 
@@ -163,6 +255,12 @@ namespace GoatTiger
             onePlayerBtnGoat.load("asGoatBtnShow", "asGoatBtnPressed", Content);
             onePlayerBtnTiger.load("asTigerBtnShow", "asTigerBtnPressed", Content);
             undoBtn.load("undoBtnShow", "undoBtnPressed", Content);
+
+            //
+            goatsRemainTextPos = new Vector2(740, 190);
+            goatsCapturedTextPos = new Vector2(740, 310);
+            goatsCountFont = Content.Load<SpriteFont>("GoatsCount");
+
             
             screenWidth = graphics.GraphicsDevice.PresentationParameters.BackBufferWidth;
             screenHeight = graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
@@ -179,6 +277,51 @@ namespace GoatTiger
             // TODO: Unload any non ContentManager content here
         }
 
+        protected override void OnExiting(object sender, System.EventArgs args)
+        {
+            // Save the game state (in this case, the high score).
+            #if WINDOWS_PHONE
+                        IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForApplication();
+            #else
+                        IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForDomain();
+            #endif
+
+            // open isolated storage, and write the savefile.
+            IsolatedStorageFileStream fs = null;
+            using (fs = savegameStorage.CreateFile(SAVEFILENAME))
+            {
+                if (fs != null)
+                {
+                    // just overwrite the existing info for this example.
+
+                    byte[] ret = new byte[42*4];
+                        //System.BitConverter.GetBytes(highScore);
+
+                    byte[] bytes1;
+                    int offSet = 0;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        for (int j = 0; j < 6; j++)
+                        {
+                            bytes1 = System.BitConverter.GetBytes((int)currentBoard.mValues[i, j]);
+                            Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                            offSet += bytes1.Length;
+                        }
+                    }
+
+                    bytes1 = System.BitConverter.GetBytes(currentBoard.mGoatsIntoBoard);
+                    Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                    offSet += bytes1.Length;
+
+                   
+                   fs.Write(ret, 0, ret.Length);
+
+                }
+            }
+
+            base.OnExiting(sender, args);
+        }
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -193,6 +336,7 @@ namespace GoatTiger
                 this.Exit();
                 if (currentScreen == gameScreens.gamePlayScreen)
                 {
+                    stashCurrentGame();
                     currentScreen = gameScreens.mainMenuScreen;
                 }
             }
@@ -236,19 +380,29 @@ namespace GoatTiger
                     twoPlayerBtn.pressed = false;
                     currentMode = gameMode.twoPlayers;
                     currentScreen = gameScreens.gamePlayScreen;
+                    gameState = gameStateTwoPlayer;
+                    currentBoard = currentBoardTwoPlayer;
                 }
                 if (onePlayerBtnGoat.pressed)
                 {
                     onePlayerBtnGoat.pressed = false;
-                    currentMode = gameMode.vsTiger;
+                    currentMode = gameMode.vsGoat;
                     currentScreen = gameScreens.gamePlayScreen;
+                    System.Diagnostics.Debug.WriteLine("current screen" + currentMode);
+                    gameState = gameStateVsGoat;
+                    currentBoard = currentBoardVsGoat;
                 }
                 if (onePlayerBtnTiger.pressed)
                 {
                     onePlayerBtnTiger.pressed = false;
-                    currentMode = gameMode.vsGoat;
+                    currentMode = gameMode.vsTiger;
                     currentScreen = gameScreens.gamePlayScreen;
+                    gameState = gameStateVsTiger;
+                    currentBoard = currentBoardVsTiger;
                 }
+
+                
+
 
             }
                
@@ -266,28 +420,15 @@ namespace GoatTiger
                 {
                     movesDepth = 4;
                 }
-                //for (int k = BoardHistory.history.Count - 8; k < BoardHistory.history.Count; k++)
-                //{
-                //    if (k > 0)
-                //    {
-                //        nodeState [,] data1 = currentBoard.mValues;
-                //        nodeState[,] data2 = BoardHistory.history.ElementAt(k);
-
-                //        //if (currentBoard.mValues.Equals(BoardHistory.history.ElementAt(k)))
-                //        if (data1.Rank == data2.Rank &&
-                //            Enumerable.Range(0, data1.Rank).All(dimension => data1.GetLength(dimension) == data2.GetLength(dimension)) && data1.Cast<nodeState>().SequenceEqual(data2.Cast<nodeState>())) 
-                //        {
-                //            System.Diagnostics.Debug.WriteLine("Equal found");
-                //        }
-                //    }
-                //}
+                
 
 
                 Board next = currentBoard.FindNextMove(movesDepth);
                 gameState.positionslist.Add(currentBoard.mValues);
                 gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
-                BoardHistory.history.Add(currentBoard.mValues);
+                
                 currentBoard = next;
+                goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
 
 
             }
@@ -323,8 +464,8 @@ namespace GoatTiger
                                     Board next = currentBoard.MakeMove(touchedPos, tobemovedpos);
                                     gameState.positionslist.Add(currentBoard.mValues);
                                     gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
-                                    BoardHistory.history.Add(currentBoard.mValues);
                                     currentBoard = next;
+                                    goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                                 }
 
 
@@ -379,8 +520,9 @@ namespace GoatTiger
                                     Board next = currentBoard.MakeMove(touchedPos, tobemovedpos);
                                     gameState.positionslist.Add(currentBoard.mValues);
                                     gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
-                                    BoardHistory.history.Add(currentBoard.mValues);
+                                    
                                     currentBoard = next;
+                                    goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                                 }
 
 
@@ -414,8 +556,8 @@ namespace GoatTiger
                                             Board next = currentBoard.MakeMove(new Point(i, j), new Point(i, j));
                                             gameState.positionslist.Add(currentBoard.mValues);
                                             gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
-                                            BoardHistory.history.Add(currentBoard.mValues);
                                             currentBoard = next;
+                                            goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                                         }
                                     }
                                 }
@@ -545,7 +687,7 @@ namespace GoatTiger
 			{
 			    for (int j = 0; j < 6; j++)
 			    {
-                    if ( grid[i,j] == nodeState.goat )
+                    if ( currentBoard.mValues[i,j] == nodeState.goat )
 			            count++;
 			    } 
 			}
@@ -569,6 +711,7 @@ namespace GoatTiger
             {
                 DrawBoard();
                 DrawPieces();
+                DrawGoatsCount();
 
 
             }
@@ -599,6 +742,23 @@ namespace GoatTiger
             Rectangle screenRectangle = new Rectangle(0, 0, boardtexture.Width,boardtexture.Height);
             spriteBatch.Draw(boardtexture, screenRectangle, Color.White);
             undoBtn.draw(spriteBatch);
+        }
+
+        void DrawGoatsCount()
+        {
+            string output1 = (TOTAL_GOATS_COUNT - currentBoard.mGoatsIntoBoard).ToString();
+            string output2 = goatsCaptured.ToString();
+
+            // Find the center of the string
+            Vector2 FontOrigin1 = goatsCountFont.MeasureString(output1) / 2;
+            Vector2 FontOrigin2 = goatsCountFont.MeasureString(output2) / 2;
+            // Draw the string
+            spriteBatch.DrawString(goatsCountFont, output1, goatsRemainTextPos, Color.Black,
+                0, FontOrigin1, 1.0f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(goatsCountFont, output2, goatsCapturedTextPos, Color.Black,
+                0, FontOrigin2, 1.0f, SpriteEffects.None, 0.5f);
+
+
         }
 
         void DrawPieces(){

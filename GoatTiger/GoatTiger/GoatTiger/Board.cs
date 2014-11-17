@@ -822,15 +822,15 @@ namespace GoatTiger
                                 newValues[move.X, move.Y] = nodeState.tiger;
                                 if (mGoatsIntoBoard == 15)
                                 {
-                                    bool canYield = true;
-                                    for (int k = BoardHistory.history.Count - 8; k < BoardHistory.history.Count; k++)
+                                    //bool canYield = true;
+                                    /*for (int k = BoardHistory.history.Count - 8; k < BoardHistory.history.Count; k++)
                                     {
                                         if (newValues.Equals(BoardHistory.history.ElementAt(k)))
                                         {
                                             canYield = false;
                                         }
-                                    }
-                                    if (canYield)
+                                    }*/
+                                    //if (canYield)
                                     {
                                         yield return new Board(newValues, !mTurnForPlayer, mGoatsIntoBoard);
                                     }
@@ -853,14 +853,14 @@ namespace GoatTiger
                                 if (mGoatsIntoBoard == 15)
                                 {
                                     bool canYield = true;
-                                    for (int k = BoardHistory.history.Count - 8; k < BoardHistory.history.Count; k++)
+                                    /*for (int k = BoardHistory.history.Count - 8; k < BoardHistory.history.Count; k++)
                                     {
                                         if (newValues.Equals(BoardHistory.history.ElementAt(k)))
                                         {
                                             canYield = false;
                                         }
-                                    }
-                                    if (canYield)
+                                    }*/
+                                    //if (canYield)
                                     {
                                         yield return new Board(newValues, !mTurnForPlayer, mGoatsIntoBoard);
                                     }

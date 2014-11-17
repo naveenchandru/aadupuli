@@ -1,8 +1,6 @@
 Content\tigerpuck.xnb
 Content\goatpuck.xnb
 Content\nonepuck.xnb
-Content\layout.xnb
-Content\lines1.xnb
 Content\none.xnb
 Content\mainmenuscreen.xnb
 Content\GamePlayBoard.xnb
@@ -14,3 +12,4 @@ Content\twoPlayerBtnPressed.xnb
 Content\twoPlayerBtnShow.xnb
 Content\undoBtnPressed.xnb
 Content\undoBtnShow.xnb
+Content\GoatsCount.xnb

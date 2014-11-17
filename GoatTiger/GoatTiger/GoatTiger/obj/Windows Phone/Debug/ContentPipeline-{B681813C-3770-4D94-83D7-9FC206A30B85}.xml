@@ -29,24 +29,6 @@
       <Time>2014-05-12T23:36:20.4328964+05:30</Time>
     </Item>
     <Item>
-      <Source>layout.png</Source>
-      <Name>layout</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\layout.xnb</Output>
-      <Time>2014-07-16T23:46:36.1691811+05:30</Time>
-    </Item>
-    <Item>
-      <Source>lines1.png</Source>
-      <Name>lines1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\lines1.xnb</Output>
-      <Time>2014-07-27T19:55:32.486897+05:30</Time>
-    </Item>
-    <Item>
       <Source>none.png</Source>
       <Name>none</Name>
       <Importer>TextureImporter</Importer>
@@ -71,7 +53,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\GamePlayBoard.xnb</Output>
-      <Time>2014-10-29T10:01:45.1475489+05:30</Time>
+      <Time>2014-11-07T23:42:39.3072972+05:30</Time>
     </Item>
     <Item>
       <Source>asGoatBtnPressed.png</Source>
@@ -144,6 +126,15 @@
       <Options>None</Options>
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\undoBtnShow.xnb</Output>
       <Time>2014-10-29T10:01:45.1845485+05:30</Time>
+    </Item>
+    <Item>
+      <Source>GoatsCount.spritefont</Source>
+      <Name>GoatsCount</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\GoatsCount.xnb</Output>
+      <Time>2014-11-07T23:43:08.8292662+05:30</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
