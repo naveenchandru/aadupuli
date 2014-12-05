@@ -47,6 +47,29 @@ namespace GoatTiger
             private set;
         }
 
+        void initmValues(){
+            mValues = new nodeState[5, 6];
+            
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 6; j++)
+                {
+                    mValues[i, j] = nodeState.none;
+                }
+                
+            }
+            mValues[0, 0] = nodeState.tiger;
+            mValues[1, 2] = nodeState.tiger;
+            mValues[1, 3] = nodeState.tiger;
+        }
+
+        public Board()
+        {
+            initmValues();
+            mTurnForPlayer = false;
+            mGoatsIntoBoard = 0;
+        }
+
         public Board(nodeState[,] values, bool turnForPlayerX, int goatsIntoBoard)
         {
             mTurnForPlayer = turnForPlayerX;

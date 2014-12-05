@@ -13,3 +13,5 @@ Content\twoPlayerBtnShow.xnb
 Content\undoBtnPressed.xnb
 Content\undoBtnShow.xnb
 Content\GoatsCount.xnb
+Content\goatsTurn.xnb
+Content\tigersTurn.xnb

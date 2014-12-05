@@ -33,7 +33,9 @@ namespace GoatTiger
         List<Point> possiblePositions = new List<Point>();
 
         int TOTAL_GOATS_COUNT = 15;
-        String SAVEFILENAME = "mode1";
+        String SAVEFILENAMEVSTIGER = "vsTigerState";
+        String SAVEFILENAMEVSGOAT = "vsGoatState";
+        String SAVEFILENAMETWOPLAYERS = "twoPlayersState";
         int highScore = 14429;
         int currentGoatsIntoBoard;
         int goatsCaptured;
@@ -42,7 +44,7 @@ namespace GoatTiger
         Texture2D goatpuck;
         Texture2D nonepuck;
         Texture2D boardtexture;
-        Texture2D mainMenuBackground;
+        Texture2D mainMenuBackground, tigersTurnText, goatsTurnText;
 
         GameState gameState, gameStateVsGoat,gameStateVsTiger, gameStateTwoPlayer;
 
@@ -98,13 +100,16 @@ namespace GoatTiger
             // TODO: Add your initialization logic here
             
             initPosition();
-            fetchSavedState();
             
-            currentBoardVsGoat = new Board(grid, false, currentGoatsIntoBoard);
-            currentBoardVsTiger = new Board(grid, false, currentGoatsIntoBoard);
-            currentBoardTwoPlayer = new Board(grid, false, currentGoatsIntoBoard);
+            
+            currentBoardVsGoat = new Board();
+            currentBoardVsTiger = new Board();
+            currentBoardTwoPlayer = new Board();
+
+            fetchSavedState();
+
             currentBoard = currentBoardVsGoat;
-            goatsCaptured = currentGoatsIntoBoard - getGoatCount();
+            goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
             gameStateVsGoat = new GameState();
             gameStateVsTiger = new GameState();
             gameStateTwoPlayer = new GameState();
@@ -133,15 +138,17 @@ namespace GoatTiger
                         using (IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForDomain())
             #endif
             {
-                if (savegameStorage.FileExists(SAVEFILENAME))
+                if (savegameStorage.FileExists(SAVEFILENAMEVSGOAT))
                 {
-                    using (IsolatedStorageFileStream fs = savegameStorage.OpenFile(SAVEFILENAME, System.IO.FileMode.Open))
+                    using (IsolatedStorageFileStream fs = savegameStorage.OpenFile(SAVEFILENAMEVSGOAT, System.IO.FileMode.Open))
                     {
                         if (fs != null)
                         {
 
                             byte[] saveBytes = new byte[4];
                             int count = 0;
+                            int puck = 0;
+                            int goatsIntoBoard = 0;
 
                             for (int i = 0; i < 5; i++)
                             {
@@ -151,8 +158,8 @@ namespace GoatTiger
 
                                     if (count > 0)
                                     {
-                                        highScore = System.BitConverter.ToInt32(saveBytes, 0);
-                                        grid[i, j] = (nodeState)highScore;
+                                        puck = System.BitConverter.ToInt32(saveBytes, 0);
+                                        currentBoardVsGoat.mValues[i, j] = (nodeState)puck;
                          //               System.Diagnostics.Debug.WriteLine("high saved" + highScore);
                                     }
                                 }
@@ -161,13 +168,117 @@ namespace GoatTiger
                             count = fs.Read(saveBytes, 0, 4);
                             if (count > 0)
                             {
-                                highScore = System.BitConverter.ToInt32(saveBytes, 0);
-                                currentGoatsIntoBoard = highScore;
+                                goatsIntoBoard = System.BitConverter.ToInt32(saveBytes, 0);
+                                currentBoardVsGoat.mGoatsIntoBoard = goatsIntoBoard;
+                            }
+
+                            count = fs.Read(saveBytes, 0, 4);
+                            if (count > 0)
+                            {
+                                bool turnForPlayer = System.BitConverter.ToBoolean(saveBytes, 0);
+                                currentBoardVsGoat.mTurnForPlayer = turnForPlayer;
                             }
 
                             // Reload the saved high-score data.
                             
                             
+                        }
+                    }
+                }
+
+
+                if (savegameStorage.FileExists(SAVEFILENAMEVSTIGER))
+                {
+                    using (IsolatedStorageFileStream fs = savegameStorage.OpenFile(SAVEFILENAMEVSTIGER, System.IO.FileMode.Open))
+                    {
+                        if (fs != null)
+                        {
+
+                            byte[] saveBytes = new byte[4];
+                            int count = 0;
+                            int puck = 0;
+                            int goatsIntoBoard = 0;
+
+                            for (int i = 0; i < 5; i++)
+                            {
+                                for (int j = 0; j < 6; j++)
+                                {
+                                    count = fs.Read(saveBytes, 0, 4);
+
+                                    if (count > 0)
+                                    {
+                                        puck = System.BitConverter.ToInt32(saveBytes, 0);
+                                        currentBoardVsTiger.mValues[i, j] = (nodeState)puck;
+                                        //               System.Diagnostics.Debug.WriteLine("high saved" + highScore);
+                                    }
+                                }
+                            }
+
+                            count = fs.Read(saveBytes, 0, 4);
+                            if (count > 0)
+                            {
+                                goatsIntoBoard = System.BitConverter.ToInt32(saveBytes, 0);
+                                currentBoardVsTiger.mGoatsIntoBoard = goatsIntoBoard;
+                            }
+
+                            count = fs.Read(saveBytes, 0, 4);
+                            if (count > 0)
+                            {
+                                bool turnForPlayer = System.BitConverter.ToBoolean(saveBytes, 0);
+                                currentBoardVsTiger.mTurnForPlayer = turnForPlayer;
+                            }
+
+                            // Reload the saved high-score data.
+
+
+                        }
+                    }
+                }
+
+                if (savegameStorage.FileExists(SAVEFILENAMETWOPLAYERS))
+                {
+                    using (IsolatedStorageFileStream fs = savegameStorage.OpenFile(SAVEFILENAMETWOPLAYERS, System.IO.FileMode.Open))
+                    {
+                        if (fs != null)
+                        {
+
+                            byte[] saveBytes = new byte[4];
+                            int count = 0;
+                            int puck = 0;
+                            int goatsIntoBoard = 0;
+
+                            for (int i = 0; i < 5; i++)
+                            {
+                                for (int j = 0; j < 6; j++)
+                                {
+                                    count = fs.Read(saveBytes, 0, 4);
+
+                                    if (count > 0)
+                                    {
+                                        puck = System.BitConverter.ToInt32(saveBytes, 0);
+                                        currentBoardTwoPlayer.mValues[i, j] = (nodeState)puck;
+                                        //               System.Diagnostics.Debug.WriteLine("high saved" + highScore);
+                                    }
+                                }
+                            }
+
+                            count = fs.Read(saveBytes, 0, 4);
+                            if (count > 0)
+                            {
+                                goatsIntoBoard = System.BitConverter.ToInt32(saveBytes, 0);
+                                currentBoardTwoPlayer.mGoatsIntoBoard = goatsIntoBoard;
+                            }
+
+                            count = fs.Read(saveBytes, 0, 4);
+                            if (count > 0)
+                            {
+                                bool turnForPlayer = System.BitConverter.ToBoolean(saveBytes, 0);
+                                currentBoardTwoPlayer.mTurnForPlayer = turnForPlayer;
+                            }
+
+                            // Reload the saved high-score data.
+
+
                         }
                     }
                 }
@@ -251,6 +362,9 @@ namespace GoatTiger
             boardtexture = Content.Load<Texture2D>("GamePlayBoard");
             mainMenuBackground = Content.Load<Texture2D>("mainmenuscreen");
 
+            goatsTurnText = Content.Load<Texture2D>("goatsTurn");
+            tigersTurnText = Content.Load<Texture2D>("tigersTurn");
+
             twoPlayerBtn.load("twoPlayerBtnShow", "twoPlayerBtnPressed", Content);
             onePlayerBtnGoat.load("asGoatBtnShow", "asGoatBtnPressed", Content);
             onePlayerBtnTiger.load("asTigerBtnShow", "asTigerBtnPressed", Content);
@@ -288,7 +402,7 @@ namespace GoatTiger
 
             // open isolated storage, and write the savefile.
             IsolatedStorageFileStream fs = null;
-            using (fs = savegameStorage.CreateFile(SAVEFILENAME))
+            using (fs = savegameStorage.CreateFile(SAVEFILENAMEVSGOAT))
             {
                 if (fs != null)
                 {
@@ -303,18 +417,96 @@ namespace GoatTiger
                     {
                         for (int j = 0; j < 6; j++)
                         {
-                            bytes1 = System.BitConverter.GetBytes((int)currentBoard.mValues[i, j]);
+                            bytes1 = System.BitConverter.GetBytes((int)currentBoardVsGoat.mValues[i, j]);
                             Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
                             offSet += bytes1.Length;
                         }
                     }
 
-                    bytes1 = System.BitConverter.GetBytes(currentBoard.mGoatsIntoBoard);
+                    bytes1 = System.BitConverter.GetBytes(currentBoardVsGoat.mGoatsIntoBoard);
+                    Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                    offSet += bytes1.Length;
+
+                    bytes1 = System.BitConverter.GetBytes(currentBoardVsGoat.mTurnForPlayer);
                     Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
                     offSet += bytes1.Length;
 
                    
                    fs.Write(ret, 0, ret.Length);
+
+                }
+            }
+
+            // open isolated storage, and write the savefile.
+            fs = null;
+            using (fs = savegameStorage.CreateFile(SAVEFILENAMEVSTIGER))
+            {
+                if (fs != null)
+                {
+                    // just overwrite the existing info for this example.
+
+                    byte[] ret = new byte[42 * 4];
+                    //System.BitConverter.GetBytes(highScore);
+
+                    byte[] bytes1;
+                    int offSet = 0;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        for (int j = 0; j < 6; j++)
+                        {
+                            bytes1 = System.BitConverter.GetBytes((int)currentBoardVsTiger.mValues[i, j]);
+                            Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                            offSet += bytes1.Length;
+                        }
+                    }
+
+                    bytes1 = System.BitConverter.GetBytes(currentBoardVsTiger.mGoatsIntoBoard);
+                    Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                    offSet += bytes1.Length;
+
+                    bytes1 = System.BitConverter.GetBytes(currentBoardVsTiger.mTurnForPlayer);
+                    Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                    offSet += bytes1.Length;
+
+
+                    fs.Write(ret, 0, ret.Length);
+
+                }
+            }
+
+            // open isolated storage, and write the savefile.
+            fs = null;
+            using (fs = savegameStorage.CreateFile(SAVEFILENAMETWOPLAYERS))
+            {
+                if (fs != null)
+                {
+                    // just overwrite the existing info for this example.
+
+                    byte[] ret = new byte[42 * 4];
+                    //System.BitConverter.GetBytes(highScore);
+
+                    byte[] bytes1;
+                    int offSet = 0;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        for (int j = 0; j < 6; j++)
+                        {
+                            bytes1 = System.BitConverter.GetBytes((int)currentBoardTwoPlayer.mValues[i, j]);
+                            Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                            offSet += bytes1.Length;
+                        }
+                    }
+
+                    bytes1 = System.BitConverter.GetBytes(currentBoardTwoPlayer.mGoatsIntoBoard);
+                    Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                    offSet += bytes1.Length;
+
+                    bytes1 = System.BitConverter.GetBytes(currentBoardTwoPlayer.mTurnForPlayer);
+                    Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                    offSet += bytes1.Length;
+
+
+                    fs.Write(ret, 0, ret.Length);
 
                 }
             }
@@ -382,6 +574,8 @@ namespace GoatTiger
                     currentScreen = gameScreens.gamePlayScreen;
                     gameState = gameStateTwoPlayer;
                     currentBoard = currentBoardTwoPlayer;
+                    goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
+
                 }
                 if (onePlayerBtnGoat.pressed)
                 {
@@ -391,6 +585,7 @@ namespace GoatTiger
                     System.Diagnostics.Debug.WriteLine("current screen" + currentMode);
                     gameState = gameStateVsGoat;
                     currentBoard = currentBoardVsGoat;
+                    goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                 }
                 if (onePlayerBtnTiger.pressed)
                 {
@@ -399,6 +594,7 @@ namespace GoatTiger
                     currentScreen = gameScreens.gamePlayScreen;
                     gameState = gameStateVsTiger;
                     currentBoard = currentBoardVsTiger;
+                    goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                 }
 
                 
@@ -712,7 +908,7 @@ namespace GoatTiger
                 DrawBoard();
                 DrawPieces();
                 DrawGoatsCount();
-
+                DrawPlayerTurn();
 
             }
             
@@ -742,6 +938,22 @@ namespace GoatTiger
             Rectangle screenRectangle = new Rectangle(0, 0, boardtexture.Width,boardtexture.Height);
             spriteBatch.Draw(boardtexture, screenRectangle, Color.White);
             undoBtn.draw(spriteBatch);
+        }
+
+        void DrawPlayerTurn()
+        {
+            Rectangle screenRectangle ;
+
+            if (currentBoard.mTurnForPlayer)
+            {
+                screenRectangle = new Rectangle(800 - 25 - tigersTurnText.Width, 25, tigersTurnText.Width, tigersTurnText.Height);
+                spriteBatch.Draw(tigersTurnText, screenRectangle, Color.White);
+            }
+            else
+            {
+                screenRectangle = new Rectangle(800 - 25 - goatsTurnText.Width, 25, goatsTurnText.Width, goatsTurnText.Height);
+                spriteBatch.Draw(goatsTurnText, screenRectangle, Color.White);
+            }
         }
 
         void DrawGoatsCount()

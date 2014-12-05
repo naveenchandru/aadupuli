@@ -59,9 +59,5 @@ F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone
 F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\undoBtnPressed.xnb
 F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\undoBtnShow.xnb
 F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\GoatsCount.xnb
-F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.xap
-F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\XapCacheFile.xml
-F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\AppManifest.xaml
-F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\WMAppManifest.xml.g
-F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\WMAppManifest.xml
-bin\Windows Phone\Debug\
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\goatsTurn.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\tigersTurn.xnb

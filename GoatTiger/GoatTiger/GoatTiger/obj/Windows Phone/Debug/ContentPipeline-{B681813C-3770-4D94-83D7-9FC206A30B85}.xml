@@ -44,7 +44,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\mainmenuscreen.xnb</Output>
-      <Time>2014-10-24T16:10:19.5696171+05:30</Time>
+      <Time>2014-12-05T23:52:34.3587813+05:30</Time>
     </Item>
     <Item>
       <Source>GamePlayBoard.png</Source>
@@ -53,7 +53,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\GamePlayBoard.xnb</Output>
-      <Time>2014-11-07T23:42:39.3072972+05:30</Time>
+      <Time>2014-12-06T00:27:41.3739182+05:30</Time>
     </Item>
     <Item>
       <Source>asGoatBtnPressed.png</Source>
@@ -62,7 +62,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\asGoatBtnPressed.xnb</Output>
-      <Time>2014-10-24T16:25:13.0567745+05:30</Time>
+      <Time>2014-12-05T23:35:04.0543751+05:30</Time>
     </Item>
     <Item>
       <Source>asGoatBtnShow.png</Source>
@@ -71,7 +71,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\asGoatBtnShow.xnb</Output>
-      <Time>2014-10-24T16:25:13.7442728+05:30</Time>
+      <Time>2014-12-05T23:32:06.1255489+05:30</Time>
     </Item>
     <Item>
       <Source>asTigerBtnPressed.png</Source>
@@ -80,7 +80,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\asTigerBtnPressed.xnb</Output>
-      <Time>2014-10-24T16:25:14.009842+05:30</Time>
+      <Time>2014-12-05T23:35:04.7115713+05:30</Time>
     </Item>
     <Item>
       <Source>asTigerBtnShow.png</Source>
@@ -89,7 +89,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\asTigerBtnShow.xnb</Output>
-      <Time>2014-10-24T16:25:14.2285901+05:30</Time>
+      <Time>2014-12-05T23:32:07.4380621+05:30</Time>
     </Item>
     <Item>
       <Source>twoPlayerBtnPressed.png</Source>
@@ -135,6 +135,24 @@
       <Options>None</Options>
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\GoatsCount.xnb</Output>
       <Time>2014-11-07T23:43:08.8292662+05:30</Time>
+    </Item>
+    <Item>
+      <Source>goatsTurn.png</Source>
+      <Name>goatsTurn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\goatsTurn.xnb</Output>
+      <Time>2014-12-06T00:08:44.1315384+05:30</Time>
+    </Item>
+    <Item>
+      <Source>tigersTurn.png</Source>
+      <Name>tigersTurn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\tigersTurn.xnb</Output>
+      <Time>2014-12-06T00:08:44.2565985+05:30</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
