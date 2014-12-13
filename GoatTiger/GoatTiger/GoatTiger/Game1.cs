@@ -46,6 +46,9 @@ namespace GoatTiger
         Texture2D boardtexture;
         Texture2D mainMenuBackground, tigersTurnText, goatsTurnText;
 
+        Texture2D overlayBGtexture, overlayBG1texture, tigersWonText, goatsWonText;
+        gButton menuBtn,newGameBtn;
+
         GameState gameState, gameStateVsGoat,gameStateVsTiger, gameStateTwoPlayer;
 
         int screenWidth;
@@ -67,7 +70,7 @@ namespace GoatTiger
         gButton undoBtn;
 
         SpriteFont goatsCountFont;
-        Vector2 goatsRemainTextPos,goatsCapturedTextPos;
+        Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, tigersWonTextPos, goatsWonTextPos;
 
 
 
@@ -127,6 +130,9 @@ namespace GoatTiger
             onePlayerBtnTiger = new gButton(410, 220);
             twoPlayerBtn = new gButton(390,320);
             undoBtn = new gButton(660, 370);
+
+            menuBtn = new gButton(280,240);
+            newGameBtn = new gButton(440, 240);
             
             
             base.Initialize();
@@ -289,6 +295,15 @@ namespace GoatTiger
             
         }
 
+        void resetCurrentGame()
+        {
+            currentBoard = new Board();
+            goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
+            gameState.positionslist.Clear();
+            gameState.mGoatsIntoBoardList.Clear();
+            DeleteCurrentSavedFile();
+        }
+
         void stashCurrentGame()
         {
             if (currentMode == gameMode.vsGoat)
@@ -303,6 +318,8 @@ namespace GoatTiger
             {
                 currentBoardTwoPlayer = currentBoard;
             }
+            newMoveDone = true;//to test for winning state
+            winner = nodeState.none;
         }
 
         void gameSaveState()
@@ -365,6 +382,11 @@ namespace GoatTiger
             boardtexture = Content.Load<Texture2D>("GamePlayBoard");
             mainMenuBackground = Content.Load<Texture2D>("mainmenuscreen");
 
+            overlayBGtexture = Content.Load<Texture2D>("overlayBG");
+            overlayBG1texture = Content.Load<Texture2D>("overlayBG1");
+            tigersWonText = Content.Load<Texture2D>("tigersWon");
+            goatsWonText = Content.Load<Texture2D>("goatsWon");
+
             goatsTurnText = Content.Load<Texture2D>("goatsTurn");
             tigersTurnText = Content.Load<Texture2D>("tigersTurn");
 
@@ -373,14 +395,23 @@ namespace GoatTiger
             onePlayerBtnTiger.load("asTigerBtnShow", "asTigerBtnPressed", Content);
             undoBtn.load("undoBtnShow", "undoBtnPressed", Content);
 
+            menuBtn.load("menuBtn", "menuBtnPressed", Content);
+            newGameBtn.load("newGameBtn", "newGameBtnPressed", Content);
+
+
             //
             goatsRemainTextPos = new Vector2(740, 190);
             goatsCapturedTextPos = new Vector2(740, 310);
+            
             goatsCountFont = Content.Load<SpriteFont>("GoatsCount");
 
             
             screenWidth = graphics.GraphicsDevice.PresentationParameters.BackBufferWidth;
             screenHeight = graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
+
+            overlayBG1Pos = new Vector2((screenWidth - 385) / 2, (screenHeight - 245) / 2);
+            tigersWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 340)/2, (screenHeight - 245) / 2 + 30);
+            goatsWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 339) / 2, (screenHeight - 245) / 2 + 30);
 
             // TODO: use this.Content to load your game content here
         }
@@ -517,6 +548,31 @@ namespace GoatTiger
             base.OnExiting(sender, args);
         }
 
+        void DeleteCurrentSavedFile()
+        {
+             // Save the game state (in this case, the high score).
+            #if WINDOWS_PHONE
+                        IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForApplication();
+            #else
+                        IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForDomain();
+            #endif
+
+            if (currentMode == gameMode.vsGoat)
+            {
+                savegameStorage.DeleteFile(SAVEFILENAMEVSGOAT);
+            }
+            else if (currentMode == gameMode.vsTiger)
+            {
+                savegameStorage.DeleteFile(SAVEFILENAMEVSTIGER);
+            }
+            else if(currentMode == gameMode.twoPlayers)
+            {
+                savegameStorage.DeleteFile(SAVEFILENAMETWOPLAYERS);
+            }
+            
+
+        }
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -578,6 +634,7 @@ namespace GoatTiger
                     gameState = gameStateTwoPlayer;
                     currentBoard = currentBoardTwoPlayer;
                     goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
+                    newMoveDone = true;//to check who won
 
                 }
                 if (onePlayerBtnGoat.pressed)
@@ -589,6 +646,7 @@ namespace GoatTiger
                     gameState = gameStateVsGoat;
                     currentBoard = currentBoardVsGoat;
                     goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
+                    newMoveDone = true;//to check who won
                 }
                 if (onePlayerBtnTiger.pressed)
                 {
@@ -598,6 +656,7 @@ namespace GoatTiger
                     gameState = gameStateVsTiger;
                     currentBoard = currentBoardVsTiger;
                     goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
+                    newMoveDone = true;//to check who won
                 }
 
                 
@@ -619,6 +678,28 @@ namespace GoatTiger
             if (currentBoard.gameWon)
             {
                 System.Diagnostics.Debug.WriteLine("Game won already",winner);
+                TouchCollection touches = TouchPanel.GetState();
+
+                if (/*!touching &&*/ touches.Count > 0)
+                {
+                    TouchLocation touch = touches.First();
+                    newGameBtn.handeTouch(touch);
+                    menuBtn.handeTouch(touch);
+                }
+                else
+                {
+                    if (newGameBtn.pressed)
+                    {
+                        newGameBtn.pressed = false;
+                        resetCurrentGame();
+                    }
+                    if (menuBtn.pressed)
+                    {
+                        menuBtn.pressed = false;
+                    }
+                }
+
+
                 return;
             }
 
@@ -895,9 +976,15 @@ namespace GoatTiger
             else if (currentScreen == gameScreens.gamePlayScreen)
             {
                 DrawBoard();
+               
                 DrawPieces();
                 DrawGoatsCount();
                 DrawPlayerTurn();
+
+                if (currentBoard.gameWon)
+                {
+                    DrawWonOverlay();
+                }
 
             }
             
@@ -927,6 +1014,22 @@ namespace GoatTiger
             Rectangle screenRectangle = new Rectangle(0, 0, boardtexture.Width,boardtexture.Height);
             spriteBatch.Draw(boardtexture, screenRectangle, Color.White);
             undoBtn.draw(spriteBatch);
+        }
+        void DrawWonOverlay()
+        {
+            Rectangle screenArea = new Rectangle(0, 0, screenWidth, screenHeight);
+            spriteBatch.Draw(overlayBGtexture, screenArea, Color.White);
+            spriteBatch.Draw(overlayBG1texture, overlayBG1Pos, Color.White);
+            if ( winner == nodeState.tiger)
+            {
+                spriteBatch.Draw(tigersWonText, tigersWonTextPos, Color.White);
+            }
+            else if (winner == nodeState.goat)
+            {
+                spriteBatch.Draw(goatsWonText, goatsWonTextPos, Color.White);
+            }
+            menuBtn.draw(spriteBatch);
+            newGameBtn.draw(spriteBatch);
         }
 
         void DrawPlayerTurn()
