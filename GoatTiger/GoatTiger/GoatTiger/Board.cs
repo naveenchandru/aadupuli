@@ -36,6 +36,8 @@ namespace GoatTiger
         public bool mTurnForPlayer;//true - tiger
         public int mGoatsIntoBoard;
 
+        public bool gameWon = false;
+
         public int RecursiveScore
         {
             get;
@@ -670,6 +672,41 @@ namespace GoatTiger
                     
                 }
             }
+        }
+
+        public bool hasGoatsWon()
+        {
+            var goatsWon = false;
+            if (mTurnForPlayer)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 6; j++)
+                    {
+                        if (mValues[i, j] == nodeState.tiger)
+                        {
+                            Point toBeMovedTigerPuck = new Point(i,j);
+                            goatsWon = true;
+                            foreach (var move in GetShortMovesForTigerPuck(mValues, toBeMovedTigerPuck))
+                            {
+                                System.Diagnostics.Debug.WriteLine("move by cpu:");
+                                goatsWon = false;
+                                return goatsWon;
+                            }
+
+                            foreach (var move in GetCaptureMovesForTigerPuck(mValues, toBeMovedTigerPuck))
+                            {
+                                System.Diagnostics.Debug.WriteLine("move by cpu:");
+                                goatsWon = false;
+                                return goatsWon;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            return goatsWon;
         }
 
         public Board FindNextMove(int depth)

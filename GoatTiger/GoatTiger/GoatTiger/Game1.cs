@@ -53,6 +53,7 @@ namespace GoatTiger
 
         Board currentBoard, currentBoardVsGoat, currentBoardVsTiger, currentBoardTwoPlayer;
         nodeState winner;
+        bool newMoveDone;
         bool puckTouched;
         Point touchedPos;
         gameMode currentMode;
@@ -115,6 +116,8 @@ namespace GoatTiger
             gameStateTwoPlayer = new GameState();
 
             winner = nodeState.none;
+            
+            newMoveDone = false;
             puckTouched = false;
             currentMode = gameMode.vsTiger;
             currentScreen = gameScreens.mainMenuScreen;
@@ -607,6 +610,18 @@ namespace GoatTiger
 
         void getInputAndUpdateGame()
         {
+            
+            if (newMoveDone)
+            {
+                currentBoard.gameWon = CheckForWin();
+                newMoveDone = false;
+            }
+            if (currentBoard.gameWon)
+            {
+                System.Diagnostics.Debug.WriteLine("Game won already",winner);
+                return;
+            }
+
             if ((currentMode == gameMode.vsTiger && currentBoard.mTurnForPlayer) || (currentMode == gameMode.vsGoat && !currentBoard.mTurnForPlayer))
             {
                 System.Diagnostics.Debug.WriteLine("move by cpu: " + currentBoard.mTurnForPlayer);
@@ -624,6 +639,7 @@ namespace GoatTiger
                 gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                 
                 currentBoard = next;
+                newMoveDone = true;
                 goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
 
 
@@ -661,6 +677,7 @@ namespace GoatTiger
                                     gameState.positionslist.Add(currentBoard.mValues);
                                     gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                                     currentBoard = next;
+                                    newMoveDone = true;
                                     goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                                 }
 
@@ -718,6 +735,7 @@ namespace GoatTiger
                                     gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                                     
                                     currentBoard = next;
+                                    newMoveDone = true;
                                     goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                                 }
 
@@ -753,6 +771,7 @@ namespace GoatTiger
                                             gameState.positionslist.Add(currentBoard.mValues);
                                             gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                                             currentBoard = next;
+                                            newMoveDone = true;
                                             goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                                         }
                                     }
@@ -800,7 +819,7 @@ namespace GoatTiger
                 }
             }
 
-            CheckForWin();
+            
         }
 
         Rectangle getTouchArea(Rectangle puckArea)
@@ -813,60 +832,30 @@ namespace GoatTiger
             return puckArea;
 
         }
-        void CheckForWin()
+        bool CheckForWin()
         {
             //check if tiger won
-            if (getGoatCount() <= 5)
+            if (currentBoard.mGoatsIntoBoard == 15 && getGoatCount() <= 5)
+            {
+                    winner = nodeState.tiger;
+                    return true;
+            }
+            else if (hasGoatsWon())
             {
                 winner = nodeState.goat;
-            }
-            else
-            {
-                didTigerWin();
+                return true;
+
             }
 
-            //check if goat won
+            return false;
+            
         }
 
         //GetMovesForTiger()
 
-        bool didTigerWin()
+        bool hasGoatsWon()
         {
-            List<Point> tigerPositions = new List<Point>();
-            
-            List<nodeState[,]> listOfMoves = new List<nodeState[,]>();
-
-            //listOfMoves = GetMovesForTiger();
-            if (grid[0, 0] == nodeState.tiger)
-            {
-                tigerPositions.Add(new Point(0, 0));
-            }
-            for (int i = 1; i < 3; i++)
-            {
-                for (int j = 0; j < 6; j++)
-                {
-                    if (grid[i, j] == nodeState.tiger)
-                    {
-                        tigerPositions.Add(new Point(i, j));
-                    }
-                }
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                if (grid[4, i] == nodeState.tiger)
-                {
-                    tigerPositions.Add(new Point(4, i));
-                }
-            }
-
-            foreach (var item in tigerPositions)
-	        {
-                IsBlocked(item);
-	        }
-            
-            
-
-            return true;
+            return currentBoard.hasGoatsWon();
         }
 
         bool IsBlocked(Point node)
