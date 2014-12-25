@@ -20,7 +20,7 @@ namespace GoatTiger
 
     enum nodeState { none, goat, tiger };
     enum gameMode { twoPlayers, vsTiger, vsGoat };
-    enum gameScreens { mainMenuScreen, gamePlayScreen, chooseSideOverlay,winnersOverlay,helpScreen };
+    enum gameScreens { mainMenuScreen, gamePlayScreen, chooseSideOverlay, winnersOverlay, helpScreen, pauseOverlay };
 
     
 
@@ -46,8 +46,8 @@ namespace GoatTiger
         Texture2D boardtexture;
         Texture2D mainMenuBackground, tigersTurnText, goatsTurnText;
 
-        Texture2D overlayBGtexture, overlayBG1texture, tigersWonText, goatsWonText;
-        gButton menuBtn,newGameBtn;
+        Texture2D overlayBGtexture, overlayBG1texture, tigersWonText, goatsWonText, pausedText;
+        gButton menuBtn,newGameBtn,resumeBtn;
 
         GameState gameState, gameStateVsGoat,gameStateVsTiger, gameStateTwoPlayer;
 
@@ -70,7 +70,7 @@ namespace GoatTiger
         gButton undoBtn;
 
         SpriteFont goatsCountFont;
-        Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, tigersWonTextPos, goatsWonTextPos;
+        Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, tigersWonTextPos, goatsWonTextPos, pausedTextPos;
 
 
 
@@ -133,6 +133,8 @@ namespace GoatTiger
 
             menuBtn = new gButton(280,240);
             newGameBtn = new gButton(440, 240);
+
+            resumeBtn = new gButton(440,240);
             
             
             base.Initialize();
@@ -386,6 +388,7 @@ namespace GoatTiger
             overlayBG1texture = Content.Load<Texture2D>("overlayBG1");
             tigersWonText = Content.Load<Texture2D>("tigersWon");
             goatsWonText = Content.Load<Texture2D>("goatsWon");
+            pausedText = Content.Load<Texture2D>("pausedText");
 
             goatsTurnText = Content.Load<Texture2D>("goatsTurn");
             tigersTurnText = Content.Load<Texture2D>("tigersTurn");
@@ -397,6 +400,7 @@ namespace GoatTiger
 
             menuBtn.load("menuBtn", "menuBtnPressed", Content);
             newGameBtn.load("newGameBtn", "newGameBtnPressed", Content);
+            resumeBtn.load("resumeBtn", "resumeBtnPressed", Content);
 
 
             //
@@ -412,6 +416,7 @@ namespace GoatTiger
             overlayBG1Pos = new Vector2((screenWidth - 385) / 2, (screenHeight - 245) / 2);
             tigersWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 340)/2, (screenHeight - 245) / 2 + 30);
             goatsWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 339) / 2, (screenHeight - 245) / 2 + 30);
+            pausedTextPos = new Vector2(overlayBG1Pos.X + (385 - 228) / 2, (screenHeight - 245) / 2 + 30);
 
             // TODO: use this.Content to load your game content here
         }
@@ -583,9 +588,19 @@ namespace GoatTiger
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
             {
-                if( currentScreen == gameScreens.mainMenuScreen)
-                this.Exit();
-                if (currentScreen == gameScreens.gamePlayScreen)
+                if (currentScreen == gameScreens.mainMenuScreen)
+                {
+                    this.Exit();
+                }
+                else if (currentScreen == gameScreens.gamePlayScreen)
+                {
+                    currentScreen = gameScreens.pauseOverlay;
+                }
+                else if (currentScreen == gameScreens.pauseOverlay)
+                {
+                    currentScreen = gameScreens.gamePlayScreen;
+                }
+                else if (currentScreen == gameScreens.pauseOverlay)
                 {
                     stashCurrentGame();
                     currentScreen = gameScreens.mainMenuScreen;
@@ -600,6 +615,10 @@ namespace GoatTiger
             {
                 getInputAndUpdateGame();
 
+            }
+            else if (currentScreen == gameScreens.pauseOverlay)
+            {
+                pausedOverlayTouchInputHandler();
             }
 
          
@@ -667,6 +686,42 @@ namespace GoatTiger
 
         }
 
+        void pausedOverlayTouchInputHandler()
+        {
+            TouchCollection touches = TouchPanel.GetState();
+            //toto
+            if ( touches.Count > 0)
+            {
+                
+                TouchLocation touch = touches.First();
+                
+                menuBtn.handeTouch(touch);
+                newGameBtn.handeTouch(touch);
+                resumeBtn.handeTouch(touch);
+
+            }
+            else
+            {
+                if (newGameBtn.pressed)
+                {
+                    newGameBtn.pressed = false;
+                    resetCurrentGame();
+                    currentScreen = gameScreens.gamePlayScreen;
+                }
+                if (menuBtn.pressed)
+                {
+                    menuBtn.pressed = false;
+                    stashCurrentGame();
+                    currentScreen = gameScreens.mainMenuScreen;
+                }
+                if (resumeBtn.pressed)
+                {
+                    resumeBtn.pressed = false;
+                    currentScreen = gameScreens.gamePlayScreen;
+                }
+            }
+        }
+
         void getInputAndUpdateGame()
         {
             
@@ -696,6 +751,8 @@ namespace GoatTiger
                     if (menuBtn.pressed)
                     {
                         menuBtn.pressed = false;
+                        stashCurrentGame();
+                        currentScreen = gameScreens.mainMenuScreen;
                     }
                 }
 
@@ -973,7 +1030,7 @@ namespace GoatTiger
             {
                 DrawMainScreen();
             }
-            else if (currentScreen == gameScreens.gamePlayScreen)
+            else if (currentScreen == gameScreens.gamePlayScreen || currentScreen == gameScreens.pauseOverlay )
             {
                 DrawBoard();
                
@@ -984,6 +1041,10 @@ namespace GoatTiger
                 if (currentBoard.gameWon)
                 {
                     DrawWonOverlay();
+                }
+                if (currentScreen == gameScreens.pauseOverlay)
+                {
+                    DrawPauseOverlay();
                 }
 
             }
@@ -1030,6 +1091,23 @@ namespace GoatTiger
             }
             menuBtn.draw(spriteBatch);
             newGameBtn.draw(spriteBatch);
+        }
+
+        void DrawPauseOverlay()
+        {
+            Rectangle screenArea = new Rectangle(0, 0, screenWidth, screenHeight);
+            spriteBatch.Draw(overlayBGtexture, screenArea, Color.White);
+            spriteBatch.Draw(overlayBG1texture, overlayBG1Pos, Color.White);
+            //toto
+            spriteBatch.Draw(pausedText, pausedTextPos, Color.White);
+
+            menuBtn.setRectByPos(240, 240);
+            menuBtn.draw(spriteBatch);
+            newGameBtn.setRectByPos(360, 240);
+            newGameBtn.draw(spriteBatch);
+            resumeBtn.setRectByPos(480, 240);
+            resumeBtn.draw(spriteBatch);
+
         }
 
         void DrawPlayerTurn()

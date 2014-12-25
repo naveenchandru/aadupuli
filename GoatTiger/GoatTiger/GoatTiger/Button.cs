@@ -56,6 +56,12 @@ namespace GoatTiger
             this.Y = Y;
             
         }
+        public void setRectByPos(int X, int Y)
+        {
+            this.X = X;
+            this.Y = Y;
+            this.rect = new Rectangle(X, Y, textureShow.Width, textureShow.Height);
+        }
 
         public void draw(SpriteBatch spriteBatch)
         {

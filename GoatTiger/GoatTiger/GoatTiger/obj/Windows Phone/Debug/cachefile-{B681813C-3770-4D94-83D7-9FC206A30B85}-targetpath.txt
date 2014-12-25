@@ -23,3 +23,6 @@ Content\menuBtn.xnb
 Content\newGameBtn.xnb
 Content\newGameBtnPressed.xnb
 Content\menuBtnPressed.xnb
+Content\resumeBtn.xnb
+Content\resumeBtnPressed.xnb
+Content\pausedText.xnb

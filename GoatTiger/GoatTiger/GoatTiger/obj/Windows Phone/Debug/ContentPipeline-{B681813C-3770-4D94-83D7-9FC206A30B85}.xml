@@ -226,6 +226,33 @@
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\menuBtnPressed.xnb</Output>
       <Time>2014-12-13T21:30:03.8344745+05:30</Time>
     </Item>
+    <Item>
+      <Source>resumeBtn.png</Source>
+      <Name>resumeBtn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\resumeBtn.xnb</Output>
+      <Time>2014-12-25T12:06:09.6301368+05:30</Time>
+    </Item>
+    <Item>
+      <Source>resumeBtnPressed.png</Source>
+      <Name>resumeBtnPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\resumeBtnPressed.xnb</Output>
+      <Time>2014-12-25T12:04:33.7475127+05:30</Time>
+    </Item>
+    <Item>
+      <Source>pausedText.png</Source>
+      <Name>pausedText</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\pausedText.xnb</Output>
+      <Time>2014-12-25T12:37:19.0935871+05:30</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{B681813C-3770-4D94-83D7-9FC206A30B85}</ContentProjectGUID>
