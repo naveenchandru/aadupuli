@@ -253,6 +253,15 @@
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\pausedText.xnb</Output>
       <Time>2014-12-25T12:37:19.0935871+05:30</Time>
     </Item>
+    <Item>
+      <Source>continueText.png</Source>
+      <Name>continueText</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\continueText.xnb</Output>
+      <Time>2014-12-27T10:27:08.6649144+05:30</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{B681813C-3770-4D94-83D7-9FC206A30B85}</ContentProjectGUID>
