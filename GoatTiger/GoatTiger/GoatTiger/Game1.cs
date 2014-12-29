@@ -1019,6 +1019,7 @@ namespace GoatTiger
 
                         }
                     }
+                    goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                     undoBtn.pressed = false;
                     touching = false;
 
@@ -1041,7 +1042,7 @@ namespace GoatTiger
         bool CheckForWin()
         {
             //check if tiger won
-            if (currentBoard.mGoatsIntoBoard == 15 && getGoatCount() <= 5)
+            if (currentBoard.mGoatsIntoBoard - getGoatCount() >= 9)
             {
                     winner = nodeState.tiger;
                     return true;
