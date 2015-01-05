@@ -46,7 +46,7 @@ namespace GoatTiger
         Texture2D boardtexture;
         Texture2D mainMenuBackground, tigersTurnText, goatsTurnText;
 
-        Texture2D overlayBGtexture, overlayBG1texture, tigersWonText, goatsWonText, pausedText, continueText;
+        Texture2D overlayBGtexture, overlayBG1texture, tigersWonText, goatsWonText, pausedText, continueText, gameDrawnText;
         gButton menuBtn,newGameBtn,resumeBtn;
 
         GameState gameState, gameStateVsGoat,gameStateVsTiger, gameStateTwoPlayer;
@@ -69,7 +69,7 @@ namespace GoatTiger
         gButton undoBtn;
 
         SpriteFont goatsCountFont;
-        Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, tigersWonTextPos, goatsWonTextPos, pausedTextPos, continueTextPos;
+        Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, tigersWonTextPos, goatsWonTextPos, pausedTextPos, continueTextPos, gameDrawnTextPos;
 
 
         public Game1()
@@ -386,6 +386,7 @@ namespace GoatTiger
             overlayBG1texture = Content.Load<Texture2D>("overlayBG1");
             tigersWonText = Content.Load<Texture2D>("tigersWon");
             goatsWonText = Content.Load<Texture2D>("goatsWon");
+            gameDrawnText = Content.Load<Texture2D>("gameDrawnText");
             pausedText = Content.Load<Texture2D>("pausedText");
             continueText = Content.Load<Texture2D>("continueText");
 
@@ -415,6 +416,7 @@ namespace GoatTiger
             overlayBG1Pos = new Vector2((screenWidth - 385) / 2, (screenHeight - 245) / 2);
             tigersWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 340)/2, (screenHeight - 245) / 2 + 30);
             goatsWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 339) / 2, (screenHeight - 245) / 2 + 30);
+            gameDrawnTextPos = new Vector2(overlayBG1Pos.X + (385 - 319) / 2, (screenHeight - 245) / 2 + 30);
             pausedTextPos = new Vector2(overlayBG1Pos.X + (385 - 228) / 2, (screenHeight - 245) / 2 + 30);
             continueTextPos = new Vector2(overlayBG1Pos.X + (385 - 293) / 2, (screenHeight - 245) / 2 + 30);
 
@@ -1051,14 +1053,58 @@ namespace GoatTiger
             {
                 winner = nodeState.goat;
                 return true;
-
             }
-
+            else if (gameDrawn())
+            {
+                System.Diagnostics.Debug.WriteLine("drawn");
+                winner = nodeState.none;
+                return true;
+            }
+            System.Diagnostics.Debug.WriteLine("no draw");
             return false;
             
         }
 
-        //GetMovesForTiger()
+        bool gameDrawn()
+        {
+            
+            int historyCount = gameState.positionslist.Count-1;
+            if (gameState.positionslist.Count >= 12)
+            {
+                for (int i = historyCount - 4; i >= historyCount - 8; i-=4)
+                {
+                    if (!ComparePositions(gameState.positionslist[i],gameState.positionslist[historyCount]))
+                    {
+                        return false;
+                    }
+                }
+                historyCount -= 1;
+                for (int i = historyCount - 4; i >= historyCount - 8; i -= 4)
+                {
+                    if (!ComparePositions(gameState.positionslist[i], gameState.positionslist[historyCount]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+        bool ComparePositions(nodeState[,] list1,nodeState[,] list2)
+        {
+            
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 6; j++)
+                {
+                    if (list1[i, j] != list2[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
 
         bool hasGoatsWon()
         {
@@ -1164,6 +1210,10 @@ namespace GoatTiger
             else if (winner == nodeState.goat)
             {
                 spriteBatch.Draw(goatsWonText, goatsWonTextPos, Color.White);
+            }
+            else if (winner == nodeState.none)
+            {
+                spriteBatch.Draw(gameDrawnText, gameDrawnTextPos, Color.White);
             }
             menuBtn.setRectByPos(280, 240);
             menuBtn.draw(spriteBatch);
