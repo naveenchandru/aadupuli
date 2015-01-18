@@ -20,7 +20,7 @@ namespace GoatTiger
 
     enum nodeState { none, goat, tiger };
     enum gameMode { twoPlayers, vsTiger, vsGoat };
-    enum gameScreens { mainMenuScreen, gamePlayScreen, chooseSideOverlay, winnersOverlay, helpScreen, pauseOverlay, continueOverlay };
+    enum gameScreens { mainMenuScreen, gamePlayScreen, chooseSideOverlay, winnersOverlay, helpScreen, pauseOverlay, continueOverlay, settingsOverlay };
 
     
 
@@ -36,6 +36,7 @@ namespace GoatTiger
         String SAVEFILENAMEVSTIGER = "vsTigerState";
         String SAVEFILENAMEVSGOAT = "vsGoatState";
         String SAVEFILENAMETWOPLAYERS = "twoPlayersState";
+        String SAVEFILESETTINGS = "settings";
         int highScore = 14429;
         int currentGoatsIntoBoard;
         int goatsCaptured;
@@ -46,8 +47,8 @@ namespace GoatTiger
         Texture2D boardtexture;
         Texture2D mainMenuBackground, tigersTurnText, goatsTurnText;
 
-        Texture2D overlayBGtexture, overlayBG1texture, tigersWonText, goatsWonText, pausedText, continueText, gameDrawnText;
-        gButton menuBtn,newGameBtn,resumeBtn;
+        Texture2D overlayBGtexture, overlayBG1texture,overlayBG2texture, tigersWonText, goatsWonText, pausedText, continueText, gameDrawnText, settingsText, levelText, SfxText;
+        gButton menuBtn,newGameBtn,resumeBtn, okBtn;
 
         GameState gameState, gameStateVsGoat,gameStateVsTiger, gameStateTwoPlayer;
 
@@ -62,14 +63,19 @@ namespace GoatTiger
         gameMode currentMode;
         bool touching;
         gameScreens currentScreen;
+        bool sfxStateOn = true;
+        //default difficulty level
+        int level = 2;
 
         gButton twoPlayerBtn;
         gButton onePlayerBtnGoat;
         gButton onePlayerBtnTiger;
-        gButton undoBtn;
+        gButton undoBtn,settingsBtn,sfxOnBtn,sfxOffBtn;
+        gButton levelBtn1, levelBtn2, levelBtn3;
+
 
         SpriteFont goatsCountFont;
-        Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, tigersWonTextPos, goatsWonTextPos, pausedTextPos, continueTextPos, gameDrawnTextPos;
+        Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, overlayBG2Pos, tigersWonTextPos, goatsWonTextPos, pausedTextPos, continueTextPos, gameDrawnTextPos, settingsTextPos, levelTextPos, sfxTextPos;
 
 
         public Game1()
@@ -99,7 +105,7 @@ namespace GoatTiger
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // initialization logic
             
             initPosition();
             
@@ -109,6 +115,7 @@ namespace GoatTiger
             currentBoardTwoPlayer = new Board();
 
             fetchSavedState();
+            fetchSavedSettings();
 
             currentBoard = currentBoardVsGoat;
             goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
@@ -127,15 +134,106 @@ namespace GoatTiger
             onePlayerBtnGoat = new gButton(430, 120);
             onePlayerBtnTiger = new gButton(410, 220);
             twoPlayerBtn = new gButton(390,320);
+            settingsBtn = new gButton(10,10);
+            sfxOnBtn = new gButton(380,175);
+            sfxOffBtn = new gButton(380,175);
             undoBtn = new gButton(660, 370);
+
+            //level
+            levelBtn1 = new gButton(375, 265);
+            levelBtn2 = new gButton(455, 265);
+            levelBtn3 = new gButton(535, 265);
 
             menuBtn = new gButton(280,240);
             newGameBtn = new gButton(440, 240);
 
             resumeBtn = new gButton(440,240);
+            okBtn = new gButton(640,320);
+            
+            //settings level
+            switch (level)
+            {
+                case 1: levelBtn1.pressed = true; break;
+                case 2: levelBtn2.pressed = true; break;
+                case 3: levelBtn3.pressed = true; break;
+                default: levelBtn1.pressed = true; break;
+
+            }
             
             
             base.Initialize();
+        }
+        void fetchSavedSettings()
+        {
+               
+            // open isolated storage, and load data from the savefile if it exists.
+            #if WINDOWS_PHONE
+                        using (IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForApplication())
+            #else
+                        using (IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForDomain())
+            #endif
+            {
+                if (savegameStorage.FileExists(SAVEFILESETTINGS))
+                {
+                    using (IsolatedStorageFileStream fs = savegameStorage.OpenFile(SAVEFILESETTINGS, System.IO.FileMode.Open))
+                    {
+                        if (fs != null){
+                            //todo: settings save
+                            byte[] saveBytes = new byte[4];
+                            int count = 0;
+                            count = fs.Read(saveBytes, 0, 4);
+                            if (count > 0)
+                            {
+                                level = System.BitConverter.ToInt32(saveBytes, 0);
+                            }
+
+                            count = fs.Read(saveBytes, 0, 4);
+                            if (count > 0)
+                            {
+                                sfxStateOn = System.BitConverter.ToBoolean(saveBytes, 0);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        void saveSettings()
+        {
+            //todo:
+            // Save the game state (in this case, the high score).
+            #if WINDOWS_PHONE
+                        IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForApplication();
+            #else
+                        IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForDomain();
+            #endif
+
+            // open isolated storage, and write the savefile.
+            IsolatedStorageFileStream fs = null;
+            using (fs = savegameStorage.CreateFile(SAVEFILESETTINGS))
+            {
+                if (fs != null)
+                {
+                    //just overwrite the existing info for this example.
+
+                    byte[] ret = new byte[2 * 4];
+
+                    byte[] bytes1;
+                    int offSet = 0;
+
+                    bytes1 = System.BitConverter.GetBytes((int)level);
+                    Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                    offSet += bytes1.Length;
+
+                    bytes1 = System.BitConverter.GetBytes((bool)sfxStateOn);
+                    Buffer.BlockCopy(bytes1, 0, ret, offSet, bytes1.Length);
+                    offSet += bytes1.Length;
+
+                    fs.Write(ret, 0, ret.Length);
+
+                }
+            }
         }
         void fetchSavedState()
         {
@@ -384,11 +482,15 @@ namespace GoatTiger
 
             overlayBGtexture = Content.Load<Texture2D>("overlayBG");
             overlayBG1texture = Content.Load<Texture2D>("overlayBG1");
+            overlayBG2texture = Content.Load<Texture2D>("overlayBG2");
             tigersWonText = Content.Load<Texture2D>("tigersWon");
             goatsWonText = Content.Load<Texture2D>("goatsWon");
             gameDrawnText = Content.Load<Texture2D>("gameDrawnText");
             pausedText = Content.Load<Texture2D>("pausedText");
             continueText = Content.Load<Texture2D>("continueText");
+            settingsText = Content.Load<Texture2D>("settingsText");
+            levelText = Content.Load<Texture2D>("levelText");
+            SfxText = Content.Load<Texture2D>("SFXText");
 
             goatsTurnText = Content.Load<Texture2D>("goatsTurn");
             tigersTurnText = Content.Load<Texture2D>("tigersTurn");
@@ -396,11 +498,19 @@ namespace GoatTiger
             twoPlayerBtn.load("twoPlayerBtnShow", "twoPlayerBtnPressed", Content);
             onePlayerBtnGoat.load("asGoatBtnShow", "asGoatBtnPressed", Content);
             onePlayerBtnTiger.load("asTigerBtnShow", "asTigerBtnPressed", Content);
+            settingsBtn.load("settingsBtn", "settingsBtn", Content);
+            sfxOnBtn.load("sfxBtn", "sfxBtnPressed", Content);
+            sfxOffBtn.load("sfxOffBtn", "sfxOffBtnPressed", Content);
+            levelBtn1.load("radioBtn", "radioBtnPressed", Content);
+            levelBtn2.load("radioBtn", "radioBtnPressed", Content);
+            levelBtn3.load("radioBtn", "radioBtnPressed", Content);
+
             undoBtn.load("undoBtnShow", "undoBtnPressed", Content);
 
             menuBtn.load("menuBtn", "menuBtnPressed", Content);
             newGameBtn.load("newGameBtn", "newGameBtnPressed", Content);
             resumeBtn.load("resumeBtn", "resumeBtnPressed", Content);
+            okBtn.load("OKBtn", "OKBtnPressed", Content);
 
 
             //
@@ -414,13 +524,18 @@ namespace GoatTiger
             screenHeight = graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
 
             overlayBG1Pos = new Vector2((screenWidth - 385) / 2, (screenHeight - 245) / 2);
+            overlayBG2Pos = new Vector2((screenWidth - 564) / 2, (screenHeight - 347) / 2);
             tigersWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 340)/2, (screenHeight - 245) / 2 + 30);
             goatsWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 339) / 2, (screenHeight - 245) / 2 + 30);
             gameDrawnTextPos = new Vector2(overlayBG1Pos.X + (385 - 319) / 2, (screenHeight - 245) / 2 + 30);
             pausedTextPos = new Vector2(overlayBG1Pos.X + (385 - 228) / 2, (screenHeight - 245) / 2 + 30);
             continueTextPos = new Vector2(overlayBG1Pos.X + (385 - 293) / 2, (screenHeight - 245) / 2 + 30);
+            settingsTextPos = new Vector2(overlayBG2Pos.X + (564 - 240) / 2, (screenHeight - 370) / 2 + 30);
+            
+            sfxTextPos = new Vector2(overlayBG2Pos.X + (100 ) / 2, (screenHeight - 160) / 2 + 30);
+            levelTextPos = new Vector2(overlayBG2Pos.X + (100) / 2, (screenHeight) / 2 + 35);
 
-            // TODO: use this.Content to load your game content here
+            
         }
 
         /// <summary>
@@ -594,6 +709,9 @@ namespace GoatTiger
                 {
                     this.Exit();
                 }
+                else if (currentScreen == gameScreens.settingsOverlay){
+                    currentScreen = gameScreens.mainMenuScreen;
+                }
                 else if (currentScreen == gameScreens.gamePlayScreen)
                 {
                     currentScreen = gameScreens.pauseOverlay;
@@ -616,6 +734,10 @@ namespace GoatTiger
             if (currentScreen == gameScreens.mainMenuScreen)
             {
                 mainScreenTouchHanlder();
+            }
+            else if (currentScreen == gameScreens.settingsOverlay)
+            {
+                settingsOverlayTouchInputHandler();
             }
             else if (currentScreen == gameScreens.gamePlayScreen)
             {
@@ -655,6 +777,7 @@ namespace GoatTiger
                 twoPlayerBtn.handeTouch(touch);
                 onePlayerBtnGoat.handeTouch(touch);
                 onePlayerBtnTiger.handeTouch(touch);
+                settingsBtn.handeTouch(touch);
 
             }
             else
@@ -694,6 +817,12 @@ namespace GoatTiger
                     newMoveDone = true;//to check who won
                     switchToGamePlayScreen();
                 }
+                if (settingsBtn.pressed)
+                {
+                    System.Diagnostics.Debug.WriteLine("settings press");
+                    settingsBtn.pressed = false;
+                    showSettingsOverlay();
+                }
 
                 
 
@@ -701,6 +830,86 @@ namespace GoatTiger
             }
                
 
+        }
+
+        void settingsOverlayTouchInputHandler()
+        {
+            TouchCollection touches = TouchPanel.GetState();
+
+            if (touches.Count > 0)
+            {
+
+                TouchLocation touch = touches.First();
+
+                okBtn.handeTouch(touch);
+
+                //level btn
+                levelBtn1.handeTouch(touch);
+                levelBtn2.handeTouch(touch);
+                levelBtn3.handeTouch(touch);
+
+                if (levelBtn1.pressed)
+                {
+                    level = 1;
+                    levelBtn1.pressed = false;
+                }
+                if (levelBtn2.pressed)
+                {
+                    level = 2;
+                    levelBtn2.pressed = false;
+                }
+                if (levelBtn3.pressed)
+                {
+                    level = 3;
+                    levelBtn3.pressed = false;
+                }
+
+                switch (level)
+                {
+                    case 1: levelBtn1.pressed = true;break;
+                    case 2: levelBtn2.pressed = true; break;
+                    case 3: levelBtn3.pressed = true; break;
+                    default: levelBtn1.pressed = true;break;
+
+                }
+
+                if (sfxStateOn)
+                {
+                    sfxOnBtn.handeTouch(touch);
+                }
+                else
+                {
+                    sfxOffBtn.handeTouch(touch);
+                }
+
+            }
+            else
+            {
+                if (okBtn.pressed)
+                {
+                    okBtn.pressed = false;
+                    saveSettings();
+                    currentScreen = gameScreens.mainMenuScreen;
+                }
+                if (sfxOnBtn.pressed)
+                {
+                    sfxOnBtn.pressed = false;
+                    sfxStateOn = false;
+                    //toggle sound state
+                }
+                if (sfxOffBtn.pressed)
+                {
+                    sfxOffBtn.pressed = false;
+                    sfxStateOn = true;
+                }
+
+                
+            }
+        }
+
+        void showSettingsOverlay()
+        {
+            currentScreen = gameScreens.settingsOverlay;
         }
 
 
@@ -834,15 +1043,16 @@ namespace GoatTiger
             {
                 System.Diagnostics.Debug.WriteLine("move by cpu: " + currentBoard.mTurnForPlayer);
 
+                /*
                 int movesDepth = 4;
                 if (currentBoard.mGoatsIntoBoard > 14)
                 {
                     movesDepth = 4;
                 }
-                
+                */
 
 
-                Board next = currentBoard.FindNextMove(movesDepth);
+                Board next = currentBoard.FindNextMove(level+1);
                 gameState.positionslist.Add(currentBoard.mValues);
                 gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                 
@@ -1141,7 +1351,8 @@ namespace GoatTiger
             GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
-            if (currentScreen == gameScreens.mainMenuScreen)
+            if (currentScreen == gameScreens.mainMenuScreen
+                || currentScreen == gameScreens.settingsOverlay)
             {
                 DrawMainScreen();
             }
@@ -1171,9 +1382,9 @@ namespace GoatTiger
 
             }
             
-            //todo
+            
             spriteBatch.End();
-            // TODO: Add your drawing code here
+            
 
             base.Draw(gameTime);
         }
@@ -1185,12 +1396,51 @@ namespace GoatTiger
             twoPlayerBtn.draw(spriteBatch);
             onePlayerBtnGoat.draw(spriteBatch);
             onePlayerBtnTiger.draw(spriteBatch);
+            settingsBtn.draw(spriteBatch);
+
+            if (currentScreen == gameScreens.settingsOverlay)
+            {
+                //show settings overlay
+                DrawSettingsOverlay();
+
+            }
             
 
             
 
             
 
+        }
+        void DrawSettingsOverlay()
+        {
+            Rectangle screenArea = new Rectangle(0, 0, screenWidth, screenHeight);
+            spriteBatch.Draw(overlayBGtexture, screenArea, Color.White);
+            //spriteBatch.Draw(overlayBG1texture, overlayBG1Pos, Color.White);
+            spriteBatch.Draw(overlayBG2texture,overlayBG2Pos,Color.White);
+            spriteBatch.Draw(settingsText, settingsTextPos, Color.White);
+            spriteBatch.Draw(levelText, levelTextPos, Color.White);
+            spriteBatch.Draw(SfxText, sfxTextPos, Color.White);
+
+            okBtn.draw(spriteBatch);
+            //radio button
+            levelBtn1.draw(spriteBatch);
+            levelBtn2.draw(spriteBatch);
+            levelBtn3.draw(spriteBatch);
+
+            if (sfxStateOn)
+            {
+                sfxOnBtn.draw(spriteBatch);
+            }
+            else
+            {
+                sfxOffBtn.draw(spriteBatch);
+            }
+           /*
+            newGameBtn.setRectByPos(280, 240);
+            newGameBtn.draw(spriteBatch);
+            resumeBtn.setRectByPos(440, 240);
+            resumeBtn.draw(spriteBatch);
+            */
         }
         void DrawBoard()
         {

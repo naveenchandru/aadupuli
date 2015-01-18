@@ -74,3 +74,16 @@ F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone
 F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\pausedText.xnb
 F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\continueText.xnb
 F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\gameDrawnText.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\settingsBtn.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\overlayBG2.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\levelText.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\settingsText.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\SFXText.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\OKBtn.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\OKBtnPressed.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\sfxBtn.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\sfxBtnPressed.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\sfxOffBtn.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\sfxOffBtnPressed.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\radioBtn.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\radioBtnPressed.xnb

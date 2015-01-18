@@ -271,6 +271,123 @@
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\gameDrawnText.xnb</Output>
       <Time>2015-01-06T00:05:29.4463132+05:30</Time>
     </Item>
+    <Item>
+      <Source>settingsBtn.png</Source>
+      <Name>settingsBtn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\settingsBtn.xnb</Output>
+      <Time>2015-01-18T12:54:56.61313+05:30</Time>
+    </Item>
+    <Item>
+      <Source>overlayBG2.png</Source>
+      <Name>overlayBG2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\overlayBG2.xnb</Output>
+      <Time>2015-01-18T18:30:14.5965741+05:30</Time>
+    </Item>
+    <Item>
+      <Source>levelText.png</Source>
+      <Name>levelText</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\levelText.xnb</Output>
+      <Time>2015-01-18T16:05:07.1146069+05:30</Time>
+    </Item>
+    <Item>
+      <Source>settingsText.png</Source>
+      <Name>settingsText</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\settingsText.xnb</Output>
+      <Time>2015-01-18T14:09:21.0472193+05:30</Time>
+    </Item>
+    <Item>
+      <Source>SFXText.png</Source>
+      <Name>SFXText</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\SFXText.xnb</Output>
+      <Time>2015-01-18T16:05:10.0900777+05:30</Time>
+    </Item>
+    <Item>
+      <Source>OKBtn.png</Source>
+      <Name>OKBtn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\OKBtn.xnb</Output>
+      <Time>2015-01-18T14:21:10.6537528+05:30</Time>
+    </Item>
+    <Item>
+      <Source>OKBtnPressed.png</Source>
+      <Name>OKBtnPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\OKBtnPressed.xnb</Output>
+      <Time>2015-01-18T15:52:25.9982403+05:30</Time>
+    </Item>
+    <Item>
+      <Source>sfxBtn.png</Source>
+      <Name>sfxBtn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\sfxBtn.xnb</Output>
+      <Time>2015-01-18T16:40:01.8256417+05:30</Time>
+    </Item>
+    <Item>
+      <Source>sfxBtnPressed.png</Source>
+      <Name>sfxBtnPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\sfxBtnPressed.xnb</Output>
+      <Time>2015-01-18T16:40:01.8316858+05:30</Time>
+    </Item>
+    <Item>
+      <Source>sfxOffBtn.png</Source>
+      <Name>sfxOffBtn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\sfxOffBtn.xnb</Output>
+      <Time>2015-01-18T17:18:41.8494911+05:30</Time>
+    </Item>
+    <Item>
+      <Source>sfxOffBtnPressed.png</Source>
+      <Name>sfxOffBtnPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\sfxOffBtnPressed.xnb</Output>
+      <Time>2015-01-18T17:18:41.8565+05:30</Time>
+    </Item>
+    <Item>
+      <Source>radioBtn.png</Source>
+      <Name>radioBtn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\radioBtn.xnb</Output>
+      <Time>2015-01-18T18:05:38.1208775+05:30</Time>
+    </Item>
+    <Item>
+      <Source>radioBtnPressed.png</Source>
+      <Name>radioBtnPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\radioBtnPressed.xnb</Output>
+      <Time>2015-01-18T18:05:38.1268816+05:30</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{B681813C-3770-4D94-83D7-9FC206A30B85}</ContentProjectGUID>

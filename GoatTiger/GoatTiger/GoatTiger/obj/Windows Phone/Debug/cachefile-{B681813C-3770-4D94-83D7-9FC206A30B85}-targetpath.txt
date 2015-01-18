@@ -28,3 +28,16 @@ Content\resumeBtnPressed.xnb
 Content\pausedText.xnb
 Content\continueText.xnb
 Content\gameDrawnText.xnb
+Content\settingsBtn.xnb
+Content\overlayBG2.xnb
+Content\levelText.xnb
+Content\settingsText.xnb
+Content\SFXText.xnb
+Content\OKBtn.xnb
+Content\OKBtnPressed.xnb
+Content\sfxBtn.xnb
+Content\sfxBtnPressed.xnb
+Content\sfxOffBtn.xnb
+Content\sfxOffBtnPressed.xnb
+Content\radioBtn.xnb
+Content\radioBtnPressed.xnb
