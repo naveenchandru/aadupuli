@@ -1173,12 +1173,13 @@ namespace GoatTiger
                                     {
                                         System.Diagnostics.Debug.WriteLine("touchedpos:" + i + j + "puck" + grid[i, j]);
                                         touchedPos = new Point(i, j);
-                                        if (grid[i, j] == nodeState.goat)
+                                        if (currentBoard.mGoatsIntoBoard == 15 && grid[i, j] == nodeState.goat)
                                         {
-                                            puckTouched = true;
+                                            
                                             foreach (var move in currentBoard.GetMovesForGoatPuck(currentBoard.mValues, new Point(i, j)))
                                             {
                                                 System.Diagnostics.Debug.WriteLine("possible pos:" + move.X + move.Y + "puck" + grid[i, j]);
+                                                puckTouched = true;
                                                 possiblePositions.Add(new Point(move.X, move.Y));
 
                                             }
@@ -1277,7 +1278,10 @@ namespace GoatTiger
 
         bool gameDrawn()
         {
-            
+            if (currentBoard.mGoatsIntoBoard<15)
+            {
+                return false;
+            }
             int historyCount = gameState.positionslist.Count-1;
             if (gameState.positionslist.Count >= 12)
             {

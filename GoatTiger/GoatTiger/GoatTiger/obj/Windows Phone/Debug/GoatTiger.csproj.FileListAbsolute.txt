@@ -87,3 +87,9 @@ F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone
 F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\sfxOffBtnPressed.xnb
 F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\radioBtn.xnb
 F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\radioBtnPressed.xnb
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.xap
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\XapCacheFile.xml
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\AppManifest.xaml
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\WMAppManifest.xml.g
+F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\obj\Windows Phone\Debug\WMAppManifest.xml
+bin\Windows Phone\Debug\
