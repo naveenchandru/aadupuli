@@ -41,3 +41,12 @@ Content\sfxOffBtn.xnb
 Content\sfxOffBtnPressed.xnb
 Content\radioBtn.xnb
 Content\radioBtnPressed.xnb
+Content\helpBtn.xnb
+Content\helpBtnPressed.xnb
+Content\slide1.xnb
+Content\slide2.xnb
+Content\slide3.xnb
+Content\leftarrow.xnb
+Content\leftarrowPressed.xnb
+Content\rightarrow.xnb
+Content\rightarrowPressed.xnb

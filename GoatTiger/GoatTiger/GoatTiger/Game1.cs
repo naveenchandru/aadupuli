@@ -70,9 +70,10 @@ namespace GoatTiger
         gButton twoPlayerBtn;
         gButton onePlayerBtnGoat;
         gButton onePlayerBtnTiger;
-        gButton undoBtn,settingsBtn,sfxOnBtn,sfxOffBtn;
+        gButton undoBtn,settingsBtn,sfxOnBtn,sfxOffBtn,helpBtn;
         gButton levelBtn1, levelBtn2, levelBtn3;
 
+        ScrollContainer helpSection;
 
         SpriteFont goatsCountFont;
         Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, overlayBG2Pos, tigersWonTextPos, goatsWonTextPos, pausedTextPos, continueTextPos, gameDrawnTextPos, settingsTextPos, levelTextPos, sfxTextPos;
@@ -93,6 +94,7 @@ namespace GoatTiger
             // Frame rate is 30 fps by default for Windows Phone.
             TargetElapsedTime = TimeSpan.FromTicks(333333);
 
+            IsFixedTimeStep = false;
             // Extend battery life under lock.
             InactiveSleepTime = TimeSpan.FromSeconds(1);
         }
@@ -131,10 +133,13 @@ namespace GoatTiger
             currentScreen = gameScreens.mainMenuScreen;
             //currentMode = gameMode.vsGoat;
 
+            helpSection = new ScrollContainer();
+
             onePlayerBtnGoat = new gButton(430, 120);
             onePlayerBtnTiger = new gButton(410, 220);
             twoPlayerBtn = new gButton(390,320);
             settingsBtn = new gButton(10,10);
+            helpBtn = new gButton(100, 10);
             sfxOnBtn = new gButton(380,175);
             sfxOffBtn = new gButton(380,175);
             undoBtn = new gButton(660, 370);
@@ -498,7 +503,11 @@ namespace GoatTiger
             twoPlayerBtn.load("twoPlayerBtnShow", "twoPlayerBtnPressed", Content);
             onePlayerBtnGoat.load("asGoatBtnShow", "asGoatBtnPressed", Content);
             onePlayerBtnTiger.load("asTigerBtnShow", "asTigerBtnPressed", Content);
+
+            helpSection.load(Content);
+
             settingsBtn.load("settingsBtn", "settingsBtn", Content);
+            helpBtn.load("helpBtn","helpBtnPressed",Content);
             sfxOnBtn.load("sfxBtn", "sfxBtnPressed", Content);
             sfxOffBtn.load("sfxOffBtn", "sfxOffBtnPressed", Content);
             levelBtn1.load("radioBtn", "radioBtnPressed", Content);
@@ -729,6 +738,10 @@ namespace GoatTiger
                 {
                     currentScreen = gameScreens.mainMenuScreen;
                 }
+                else if (currentScreen == gameScreens.helpScreen)
+                {
+                    currentScreen = gameScreens.mainMenuScreen;
+                }
             }
 
             if (currentScreen == gameScreens.mainMenuScreen)
@@ -756,6 +769,10 @@ namespace GoatTiger
             {
                 continueOverlayTouchInputHandler();
             }
+            else if (currentScreen == gameScreens.helpScreen)
+            {
+                helpScreenTouchHandler(gameTime);
+            }
 
          
             base.Update(gameTime);
@@ -778,6 +795,7 @@ namespace GoatTiger
                 onePlayerBtnGoat.handeTouch(touch);
                 onePlayerBtnTiger.handeTouch(touch);
                 settingsBtn.handeTouch(touch);
+                helpBtn.handeTouch(touch);
 
             }
             else
@@ -823,6 +841,11 @@ namespace GoatTiger
                     settingsBtn.pressed = false;
                     showSettingsOverlay();
                 }
+                if(helpBtn.pressed){
+                    System.Diagnostics.Debug.WriteLine("help button press");
+                    helpBtn.pressed = false;
+                    showHelpScreen();
+                }
 
                 
 
@@ -830,6 +853,13 @@ namespace GoatTiger
             }
                
 
+        }
+
+        void helpScreenTouchHandler(GameTime gameTime)
+        {
+
+            helpSection.handleTouch(gameTime);
+            
         }
 
         void settingsOverlayTouchInputHandler()
@@ -910,6 +940,11 @@ namespace GoatTiger
         void showSettingsOverlay()
         {
             currentScreen = gameScreens.settingsOverlay;
+        }
+
+        void showHelpScreen()
+        {
+            currentScreen = gameScreens.helpScreen;
         }
 
 
@@ -1055,7 +1090,24 @@ namespace GoatTiger
                 Board next = currentBoard.FindNextMove(level+1);
                 gameState.positionslist.Add(currentBoard.mValues);
                 gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
-                
+                //find diff of position
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 6; j++)
+                    {
+                        if (currentBoard.mValues[i, j] == next.mValues[i, j])
+                        {
+
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("value: " + next.mValues[i,j] + "chaange i:" + i + "j:" + j);
+                        }
+                    }
+                    
+                }
+
+                //find diff of position
                 currentBoard = next;
                 newMoveDone = true;
                 goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
@@ -1360,13 +1412,18 @@ namespace GoatTiger
             {
                 DrawMainScreen();
             }
-            else if (currentScreen == gameScreens.gamePlayScreen 
-                || currentScreen == gameScreens.pauseOverlay 
+            else if (currentScreen == gameScreens.helpScreen)
+            {
+
+                DrawHelpScreen(gameTime);
+            }
+            else if (currentScreen == gameScreens.gamePlayScreen
+                || currentScreen == gameScreens.pauseOverlay
                 || currentScreen == gameScreens.winnersOverlay
                 || currentScreen == gameScreens.continueOverlay)
             {
                 DrawBoard();
-               
+
                 DrawPieces();
                 DrawGoatsCount();
                 DrawPlayerTurn();
@@ -1401,6 +1458,7 @@ namespace GoatTiger
             onePlayerBtnGoat.draw(spriteBatch);
             onePlayerBtnTiger.draw(spriteBatch);
             settingsBtn.draw(spriteBatch);
+            helpBtn.draw(spriteBatch);
 
             if (currentScreen == gameScreens.settingsOverlay)
             {
@@ -1445,6 +1503,11 @@ namespace GoatTiger
             resumeBtn.setRectByPos(440, 240);
             resumeBtn.draw(spriteBatch);
             */
+        }
+
+        void DrawHelpScreen(GameTime gameTime)
+        {
+            helpSection.draw(gameTime,spriteBatch);
         }
         void DrawBoard()
         {

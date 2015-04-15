@@ -388,6 +388,87 @@
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\radioBtnPressed.xnb</Output>
       <Time>2015-01-18T18:05:38.1268816+05:30</Time>
     </Item>
+    <Item>
+      <Source>helpBtn.png</Source>
+      <Name>helpBtn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\helpBtn.xnb</Output>
+      <Time>2015-03-18T10:03:07.7291722+05:30</Time>
+    </Item>
+    <Item>
+      <Source>helpBtnPressed.png</Source>
+      <Name>helpBtnPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\helpBtnPressed.xnb</Output>
+      <Time>2015-03-18T10:03:07.8621797+05:30</Time>
+    </Item>
+    <Item>
+      <Source>slide1.png</Source>
+      <Name>slide1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide1.xnb</Output>
+      <Time>2015-04-13T22:52:11.4819217+05:30</Time>
+    </Item>
+    <Item>
+      <Source>slide2.png</Source>
+      <Name>slide2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide2.xnb</Output>
+      <Time>2015-04-13T22:52:11.5734456+05:30</Time>
+    </Item>
+    <Item>
+      <Source>slide3.png</Source>
+      <Name>slide3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide3.xnb</Output>
+      <Time>2015-04-13T22:52:11.5864398+05:30</Time>
+    </Item>
+    <Item>
+      <Source>leftarrow.png</Source>
+      <Name>leftarrow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\leftarrow.xnb</Output>
+      <Time>2015-04-15T23:02:23.0654137+05:30</Time>
+    </Item>
+    <Item>
+      <Source>leftarrowPressed.png</Source>
+      <Name>leftarrowPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\leftarrowPressed.xnb</Output>
+      <Time>2015-04-15T23:02:23.1394155+05:30</Time>
+    </Item>
+    <Item>
+      <Source>rightarrow.png</Source>
+      <Name>rightarrow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\rightarrow.xnb</Output>
+      <Time>2015-04-15T23:02:23.1424207+05:30</Time>
+    </Item>
+    <Item>
+      <Source>rightarrowPressed.png</Source>
+      <Name>rightarrowPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\rightarrowPressed.xnb</Output>
+      <Time>2015-04-15T23:02:23.1704175+05:30</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{B681813C-3770-4D94-83D7-9FC206A30B85}</ContentProjectGUID>
