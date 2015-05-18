@@ -1,9 +1,9 @@
-﻿<xapCache source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.xap" wasSigned="False" certificateThumbprint="" TimeStampUrl="" lastWriteTime="15-04-2015 11.20.47 PM">
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\GoatTilesBackground.png" archivePath="GoatTilesBackground.png" lastWriteTime="23-10-2014 9.37.54 AM" />
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\GoatTilesBackground.png" archivePath="GoatTilesBackground.png" lastWriteTime="23-10-2014 9.37.54 AM" />
+﻿<xapCache source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.xap" wasSigned="False" certificateThumbprint="" TimeStampUrl="" lastWriteTime="18-05-2015 9.14.25 PM">
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\tileIcon.png" archivePath="tileIcon.png" lastWriteTime="16-05-2015 5.56.10 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\tileIcon.png" archivePath="tileIcon.png" lastWriteTime="16-05-2015 5.56.10 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\AppManifest.xaml" archivePath="AppManifest.xaml" lastWriteTime="03-05-2014 8.01.53 PM" />
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\WMAppManifest.xml" archivePath="WMAppManifest.xml" lastWriteTime="23-10-2014 9.38.30 AM" />
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.dll" archivePath="GoatTiger.dll" lastWriteTime="15-04-2015 11.20.44 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\WMAppManifest.xml" archivePath="WMAppManifest.xml" lastWriteTime="16-05-2015 5.57.07 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\GoatTiger.dll" archivePath="GoatTiger.dll" lastWriteTime="18-05-2015 9.14.17 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\tigerpuck.xnb" archivePath="Content\tigerpuck.xnb" lastWriteTime="10-08-2014 9.57.39 AM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\goatpuck.xnb" archivePath="Content\goatpuck.xnb" lastWriteTime="10-08-2014 9.57.39 AM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\nonepuck.xnb" archivePath="Content\nonepuck.xnb" lastWriteTime="10-08-2014 9.57.39 AM" />
@@ -22,7 +22,7 @@
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\goatsTurn.xnb" archivePath="Content\goatsTurn.xnb" lastWriteTime="06-12-2014 12.17.31 AM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\tigersTurn.xnb" archivePath="Content\tigersTurn.xnb" lastWriteTime="06-12-2014 12.17.31 AM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\overlayBG.xnb" archivePath="Content\overlayBG.xnb" lastWriteTime="13-12-2014 5.35.54 PM" />
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\overlayBG1.xnb" archivePath="Content\overlayBG1.xnb" lastWriteTime="13-12-2014 6.20.25 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\overlayBG1.xnb" archivePath="Content\overlayBG1.xnb" lastWriteTime="16-05-2015 5.26.40 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\tigersWon.xnb" archivePath="Content\tigersWon.xnb" lastWriteTime="13-12-2014 7.03.47 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\goatsWon.xnb" archivePath="Content\goatsWon.xnb" lastWriteTime="13-12-2014 7.29.55 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\menuBtn.xnb" archivePath="Content\menuBtn.xnb" lastWriteTime="13-12-2014 8.14.29 PM" />
@@ -34,8 +34,8 @@
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\pausedText.xnb" archivePath="Content\pausedText.xnb" lastWriteTime="25-12-2014 12.44.28 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\continueText.xnb" archivePath="Content\continueText.xnb" lastWriteTime="27-12-2014 10.33.45 AM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\gameDrawnText.xnb" archivePath="Content\gameDrawnText.xnb" lastWriteTime="06-01-2015 12.05.34 AM" />
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\settingsBtn.xnb" archivePath="Content\settingsBtn.xnb" lastWriteTime="18-01-2015 1.02.09 PM" />
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\overlayBG2.xnb" archivePath="Content\overlayBG2.xnb" lastWriteTime="18-01-2015 6.30.19 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\settingsBtn.xnb" archivePath="Content\settingsBtn.xnb" lastWriteTime="20-04-2015 10.43.27 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\overlayBG2.xnb" archivePath="Content\overlayBG2.xnb" lastWriteTime="16-05-2015 5.26.41 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\levelText.xnb" archivePath="Content\levelText.xnb" lastWriteTime="18-01-2015 4.05.16 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\settingsText.xnb" archivePath="Content\settingsText.xnb" lastWriteTime="18-01-2015 2.09.25 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\SFXText.xnb" archivePath="Content\SFXText.xnb" lastWriteTime="18-01-2015 4.05.16 PM" />
@@ -49,11 +49,24 @@
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\radioBtnPressed.xnb" archivePath="Content\radioBtnPressed.xnb" lastWriteTime="18-01-2015 6.07.47 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\helpBtn.xnb" archivePath="Content\helpBtn.xnb" lastWriteTime="18-03-2015 10.06.28 AM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\helpBtnPressed.xnb" archivePath="Content\helpBtnPressed.xnb" lastWriteTime="18-03-2015 10.06.28 AM" />
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide1.xnb" archivePath="Content\slide1.xnb" lastWriteTime="13-04-2015 10.52.59 PM" />
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide2.xnb" archivePath="Content\slide2.xnb" lastWriteTime="13-04-2015 10.52.59 PM" />
-  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide3.xnb" archivePath="Content\slide3.xnb" lastWriteTime="13-04-2015 10.52.59 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide2.xnb" archivePath="Content\slide2.xnb" lastWriteTime="13-05-2015 11.38.50 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide3.xnb" archivePath="Content\slide3.xnb" lastWriteTime="13-05-2015 11.38.51 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\leftarrow.xnb" archivePath="Content\leftarrow.xnb" lastWriteTime="15-04-2015 11.03.19 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\leftarrowPressed.xnb" archivePath="Content\leftarrowPressed.xnb" lastWriteTime="15-04-2015 11.03.19 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\rightarrow.xnb" archivePath="Content\rightarrow.xnb" lastWriteTime="15-04-2015 11.03.19 PM" />
   <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\rightarrowPressed.xnb" archivePath="Content\rightarrowPressed.xnb" lastWriteTime="15-04-2015 11.03.20 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\settingsBtnPressed.xnb" archivePath="Content\settingsBtnPressed.xnb" lastWriteTime="20-04-2015 10.43.27 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\circle.xnb" archivePath="Content\circle.xnb" lastWriteTime="22-04-2015 10.16.00 AM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\diamond.xnb" archivePath="Content\diamond.xnb" lastWriteTime="22-04-2015 10.16.00 AM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\star.xnb" archivePath="Content\star.xnb" lastWriteTime="22-04-2015 10.16.00 AM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\nextBtn.xnb" archivePath="Content\nextBtn.xnb" lastWriteTime="10-05-2015 12.18.08 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\nextBtnPressed.xnb" archivePath="Content\nextBtnPressed.xnb" lastWriteTime="10-05-2015 12.18.08 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\prevBtn.xnb" archivePath="Content\prevBtn.xnb" lastWriteTime="10-05-2015 12.22.52 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\prevBtnPressed.xnb" archivePath="Content\prevBtnPressed.xnb" lastWriteTime="10-05-2015 12.22.53 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide1.xnb" archivePath="Content\slide1.xnb" lastWriteTime="13-05-2015 11.38.51 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\borderhelp.xnb" archivePath="Content\borderhelp.xnb" lastWriteTime="11-05-2015 11.59.56 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide4.xnb" archivePath="Content\slide4.xnb" lastWriteTime="13-05-2015 11.38.51 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide5.xnb" archivePath="Content\slide5.xnb" lastWriteTime="13-05-2015 11.38.51 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\slide6.xnb" archivePath="Content\slide6.xnb" lastWriteTime="13-05-2015 11.38.51 PM" />
+  <file source="F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\63531__florian-reinke__click1.xnb" archivePath="Content\63531__florian-reinke__click1.xnb" lastWriteTime="17-05-2015 12.30.02 AM" />
 </xapCache>

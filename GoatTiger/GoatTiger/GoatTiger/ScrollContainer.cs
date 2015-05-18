@@ -17,16 +17,17 @@ namespace GoatTiger
         List<Texture2D> screens;
         int currentScreen;
         Vector2 currentScreenPos, preScreenPos, nextScreenPos, prepreScreenPos,nextnextScreenPos;
+        Texture2D helpborder;
         bool transitionStarted = false, rightTransitionStarted=false;
         GameTime gametime;
         const int pageWidth = 720;
         //todo: this class accepts screens and provides a scrolling content
         public ScrollContainer()
         {
-            this.leftArrow = new gButton(0,200);
-            this.rightArrow = new gButton(700, 200);
+            this.leftArrow = new gButton(10,200);
+            this.rightArrow = new gButton(713, 200);
             this.screens = new List<Texture2D>();
-            currentScreenPos = new Vector2(0,0);
+            currentScreenPos = new Vector2(40,0);
             preScreenPos = new Vector2(currentScreenPos.X - pageWidth, 0);
             nextScreenPos = new Vector2(currentScreenPos.X + pageWidth, 0);
             prepreScreenPos = new Vector2(currentScreenPos.X - 2*pageWidth, 0);
@@ -35,23 +36,25 @@ namespace GoatTiger
         }
         public void load(ContentManager Content)
         {
-            rightArrow.load("rightarrow", "rightarrowPressed", Content);
-            rightArrow.setRect(new Rectangle(800-60-10, 200, 60, 80));
-            leftArrow.load("leftarrow", "leftarrowPressed", Content);
-            leftArrow.setRect(new Rectangle(10, 200, 60, 80));
+            rightArrow.load("nextBtn", "nextBtnPressed", Content);
+            //rightArrow.setRect(new Rectangle(800-60-10, 200, 60, 80));
+            leftArrow.load("prevBtn", "prevBtnPressed", Content);
+            //leftArrow.setRect(new Rectangle(10, 200, 60, 80));
             screens.Add(Content.Load<Texture2D>("slide1"));
             screens.Add(Content.Load<Texture2D>("slide2"));
             screens.Add(Content.Load<Texture2D>("slide3"));
-            screens.Add(Content.Load<Texture2D>("slide1"));
-            screens.Add(Content.Load<Texture2D>("slide2"));
-            screens.Add(Content.Load<Texture2D>("slide3"));
-            screens.Add(Content.Load<Texture2D>("slide1")); 
-            screens.Add(Content.Load<Texture2D>("slide2"));
-            screens.Add(Content.Load<Texture2D>("slide3"));
-            screens.Add(Content.Load<Texture2D>("slide1")); 
-            screens.Add(Content.Load<Texture2D>("slide2"));
-            screens.Add(Content.Load<Texture2D>("slide3"));
-            screens.Add(Content.Load<Texture2D>("slide1"));
+            screens.Add(Content.Load<Texture2D>("slide4"));
+            screens.Add(Content.Load<Texture2D>("slide5"));
+            screens.Add(Content.Load<Texture2D>("slide6"));
+            
+            //screens.Add(Content.Load<Texture2D>("slide2"));
+            //screens.Add(Content.Load<Texture2D>("slide3"));
+            //screens.Add(Content.Load<Texture2D>("slide1")); 
+            //screens.Add(Content.Load<Texture2D>("slide2"));
+            //screens.Add(Content.Load<Texture2D>("slide3"));
+            //screens.Add(Content.Load<Texture2D>("slide1"));
+
+            helpborder = Content.Load<Texture2D>("borderhelp");
         }
         public void draw(GameTime gameTime,SpriteBatch spriteBatch)
         {
@@ -76,8 +79,21 @@ namespace GoatTiger
                 spriteBatch.Draw(screens[currentScreen + 2], nextnextScreenPos, Color.White);
             }
             //slideIn(spriteBatch);
-            leftArrow.draw(spriteBatch);
-            rightArrow.draw(spriteBatch);
+
+            spriteBatch.Draw(helpborder, Vector2.Zero, Color.White);
+
+            if (currentScreen + 1 < screens.Count)
+            {
+                rightArrow.draw(spriteBatch);
+            }
+            if (currentScreen > 0)
+            {
+                leftArrow.draw(spriteBatch);
+            }
+
+            
+            
+
             System.Diagnostics.Debug.WriteLine("lapsed::" + gameTime.ElapsedGameTime);
 
         }
@@ -101,10 +117,10 @@ namespace GoatTiger
 
                 if (currentScreen+1 < screens.Count)
                 {
-                    leftArrow.handeTouch(touch);
+                    rightArrow.handeTouch(touch);
                 }
                 if (currentScreen > 0){
-                    rightArrow.handeTouch(touch);
+                    leftArrow.handeTouch(touch);
                 }
                 
             }
@@ -112,15 +128,15 @@ namespace GoatTiger
             {
                 
 
-                if (leftArrow.pressed)
+                if (rightArrow.pressed)
                 {
                     currentScreen++;
                     if (currentScreen > screens.Count - 1)
                     {
                         currentScreen = screens.Count - 1;
                     }
-                    
-                    leftArrow.pressed = false;
+
+                    rightArrow.pressed = false;
                     currentScreenPos.X = 800-40;
                     preScreenPos.X = currentScreenPos.X - pageWidth;
                     nextScreenPos.X = currentScreenPos.X + pageWidth;
@@ -132,7 +148,7 @@ namespace GoatTiger
                     transitionStarted = true;
                     
                 }
-                if (rightArrow.pressed)
+                if (leftArrow.pressed)
                 {
                     currentScreen--;
                     if (currentScreen < 0)
@@ -149,7 +165,7 @@ namespace GoatTiger
                     System.Diagnostics.Debug.WriteLine("leftscroll" + currentScreen);
                     rightTransitionStarted = true;
 
-                    rightArrow.pressed = false;
+                    leftArrow.pressed = false;
                     System.Diagnostics.Debug.WriteLine("right scroll" + currentScreen);
                 }
             }

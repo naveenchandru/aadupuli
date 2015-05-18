@@ -20,8 +20,8 @@ namespace GoatTiger
         Texture2D textureShow,texturePressed;
         Rectangle rect;
         Vector2 pos;
-        int X;
-        int Y;
+        public int X;
+        public int Y;
 
         public gButton(int X,int Y)
         {

@@ -55,17 +55,19 @@ namespace GoatTiger
         int screenWidth;
         int screenHeight;
 
-        Board currentBoard, currentBoardVsGoat, currentBoardVsTiger, currentBoardTwoPlayer;
+        Board currentBoard, currentBoardVsGoat, currentBoardVsTiger, currentBoardTwoPlayer, nextBoard;
         nodeState winner;
         bool newMoveDone;
         bool puckTouched;
         Point touchedPos;
         gameMode currentMode;
         bool touching;
-        gameScreens currentScreen;
+        gameScreens currentScreen,nextScreen;
         bool sfxStateOn = true;
         //default difficulty level
         int level = 2;
+
+        bool settingsClosing = false, pauseClosing= false, continueClosing = false, winnersClosing=false;
 
         gButton twoPlayerBtn;
         gButton onePlayerBtnGoat;
@@ -76,8 +78,16 @@ namespace GoatTiger
         ScrollContainer helpSection;
 
         SpriteFont goatsCountFont;
-        Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, overlayBG2Pos, tigersWonTextPos, goatsWonTextPos, pausedTextPos, continueTextPos, gameDrawnTextPos, settingsTextPos, levelTextPos, sfxTextPos;
+        Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, overlayBG2Pos, tigersWonTextPos, goatsWonTextPos, pausedTextPos, continueTextPos, gameDrawnTextPos, settingsTextPos, levelTextPos, sfxTextPos, settingsVelocity;
 
+        StarParticleEngine starParticleEngine;
+        Vector2 EmitterLoc;
+
+        private SoundEffect effect;
+        GameTime prevtime;
+        double prevTotSeconds;
+        bool pieceTransition=false;
+        
 
         public Game1()
         {
@@ -92,9 +102,13 @@ namespace GoatTiger
                                         DisplayOrientation.LandscapeRight;
    
             // Frame rate is 30 fps by default for Windows Phone.
-            TargetElapsedTime = TimeSpan.FromTicks(333333);
+            //TargetElapsedTime = TimeSpan.FromTicks(333333);
 
+            graphics.SynchronizeWithVerticalRetrace = false;
+            //settingsBtn 50 fps
             IsFixedTimeStep = false;
+            TargetElapsedTime = TimeSpan.FromMilliseconds(20); 
+
             // Extend battery life under lock.
             InactiveSleepTime = TimeSpan.FromSeconds(1);
         }
@@ -140,6 +154,8 @@ namespace GoatTiger
             twoPlayerBtn = new gButton(390,320);
             settingsBtn = new gButton(10,10);
             helpBtn = new gButton(100, 10);
+
+
             sfxOnBtn = new gButton(380,175);
             sfxOffBtn = new gButton(380,175);
             undoBtn = new gButton(660, 370);
@@ -506,8 +522,13 @@ namespace GoatTiger
 
             helpSection.load(Content);
 
-            settingsBtn.load("settingsBtn", "settingsBtn", Content);
+
+            settingsBtn.load("settingsBtn", "settingsBtnPressed", Content);
+            settingsBtn.setRect(new Rectangle(620, 20, 65, 65));
+
             helpBtn.load("helpBtn","helpBtnPressed",Content);
+            helpBtn.setRect(new Rectangle(700, 20, 65, 65));
+
             sfxOnBtn.load("sfxBtn", "sfxBtnPressed", Content);
             sfxOffBtn.load("sfxOffBtn", "sfxOffBtnPressed", Content);
             levelBtn1.load("radioBtn", "radioBtnPressed", Content);
@@ -543,6 +564,18 @@ namespace GoatTiger
             
             sfxTextPos = new Vector2(overlayBG2Pos.X + (100 ) / 2, (screenHeight - 160) / 2 + 30);
             levelTextPos = new Vector2(overlayBG2Pos.X + (100) / 2, (screenHeight) / 2 + 35);
+
+            settingsVelocity = new Vector2(0,2000);
+
+            List<Texture2D> textures = new List<Texture2D>();
+            textures.Add(Content.Load<Texture2D>("circle"));
+            textures.Add(Content.Load<Texture2D>("star"));
+            textures.Add(Content.Load<Texture2D>("diamond"));
+            starParticleEngine = new StarParticleEngine(textures, new Vector2(400, 240));
+            EmitterLoc = Vector2.Zero;
+
+            //sound efx
+            effect = Content.Load<SoundEffect>("63531__florian-reinke__click1");
 
             
         }
@@ -719,24 +752,30 @@ namespace GoatTiger
                     this.Exit();
                 }
                 else if (currentScreen == gameScreens.settingsOverlay){
-                    currentScreen = gameScreens.mainMenuScreen;
+                    settingsClosing = true;
+                    //currentScreen = gameScreens.mainMenuScreen;
                 }
                 else if (currentScreen == gameScreens.gamePlayScreen)
                 {
+                    resetPause();
                     currentScreen = gameScreens.pauseOverlay;
                 }
                 else if (currentScreen == gameScreens.pauseOverlay)
                 {
-                    currentScreen = gameScreens.gamePlayScreen;
+                    pauseClosing = true;
+                    nextScreen = gameScreens.gamePlayScreen;
+                    //currentScreen = gameScreens.gamePlayScreen;
                 }
                 else if (currentScreen == gameScreens.winnersOverlay)
                 {
                     resetCurrentGame();
-                    currentScreen = gameScreens.gamePlayScreen;
+                    winnersClosing = true;
+                    nextScreen = gameScreens.gamePlayScreen;
                 }
                 else if (currentScreen == gameScreens.continueOverlay)
                 {
-                    currentScreen = gameScreens.mainMenuScreen;
+                    continueClosing = true;
+                    nextScreen = gameScreens.mainMenuScreen;
                 }
                 else if (currentScreen == gameScreens.helpScreen)
                 {
@@ -750,24 +789,24 @@ namespace GoatTiger
             }
             else if (currentScreen == gameScreens.settingsOverlay)
             {
-                settingsOverlayTouchInputHandler();
+                settingsOverlayTouchInputHandler(gameTime);
             }
             else if (currentScreen == gameScreens.gamePlayScreen)
             {
-                getInputAndUpdateGame();
+                getInputAndUpdateGame(gameTime);
 
             }
             else if (currentScreen == gameScreens.pauseOverlay)
             {
-                pausedOverlayTouchInputHandler();
+                pausedOverlayTouchInputHandler(gameTime);
             }
             else if (currentScreen == gameScreens.winnersOverlay)
             {
-                winnersOverlayTouchInputHandler();
+                winnersOverlayTouchInputHandler(gameTime);
             }
             else if (currentScreen == gameScreens.continueOverlay)
             {
-                continueOverlayTouchInputHandler();
+                continueOverlayTouchInputHandler(gameTime);
             }
             else if (currentScreen == gameScreens.helpScreen)
             {
@@ -862,8 +901,67 @@ namespace GoatTiger
             
         }
 
-        void settingsOverlayTouchInputHandler()
+        void resetSettings()
         {
+            overlayBG2Pos.Y = -400f;
+            settingsTextPos.Y = overlayBG2Pos.Y + 20;
+            levelTextPos.Y = overlayBG2Pos.Y + 210;
+            sfxTextPos.Y = overlayBG2Pos.Y + 125;
+            sfxOnBtn.setRectByPos(sfxOnBtn.X, (int)overlayBG2Pos.Y + 110);
+            sfxOffBtn.setRectByPos(sfxOffBtn.X, (int)overlayBG2Pos.Y + 110);
+
+            okBtn.setRectByPos(okBtn.X, (int)overlayBG2Pos.Y + 255);
+
+            levelBtn1.setRectByPos(levelBtn1.X, (int)overlayBG2Pos.Y + 200);
+            levelBtn2.setRectByPos(levelBtn2.X, (int)overlayBG2Pos.Y + 200);
+            levelBtn3.setRectByPos(levelBtn3.X, (int)overlayBG2Pos.Y + 200);
+
+            settingsClosing = false;
+        }
+
+        void updateSettings(GameTime gameTime)
+        {
+            if (settingsClosing)
+            {
+                overlayBG2Pos -= settingsVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (overlayBG2Pos.Y <= -400)
+                {
+                    overlayBG2Pos.Y = -400;
+                    currentScreen = gameScreens.mainMenuScreen;
+
+                }
+            }
+            else
+            {
+                overlayBG2Pos += settingsVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (overlayBG2Pos.Y >= 66)
+                {
+                    overlayBG2Pos.Y = 66;
+                }
+            }
+            System.Diagnostics.Debug.WriteLine("move by cpu: " + gameTime.ElapsedGameTime.TotalSeconds);
+
+            settingsTextPos.Y = overlayBG2Pos.Y + 20;
+            levelTextPos.Y = overlayBG2Pos.Y + 210;
+            sfxTextPos.Y = overlayBG2Pos.Y + 125;
+            sfxOnBtn.setRectByPos(sfxOnBtn.X, (int)overlayBG2Pos.Y + 110);
+            sfxOffBtn.setRectByPos(sfxOffBtn.X, (int)overlayBG2Pos.Y + 110);
+
+            okBtn.setRectByPos(okBtn.X, (int)overlayBG2Pos.Y + 255);
+
+            levelBtn1.setRectByPos(levelBtn1.X, (int)overlayBG2Pos.Y + 200);
+            levelBtn2.setRectByPos(levelBtn2.X, (int)overlayBG2Pos.Y + 200);
+            levelBtn3.setRectByPos(levelBtn3.X, (int)overlayBG2Pos.Y + 200);
+
+
+        }
+
+        void settingsOverlayTouchInputHandler(GameTime gameTime)
+        {
+
+            //update settings
+            updateSettings(gameTime);
+
             TouchCollection touches = TouchPanel.GetState();
 
             if (touches.Count > 0)
@@ -919,7 +1017,8 @@ namespace GoatTiger
                 {
                     okBtn.pressed = false;
                     saveSettings();
-                    currentScreen = gameScreens.mainMenuScreen;
+                    settingsClosing = true;
+                    //currentScreen = gameScreens.mainMenuScreen;
                 }
                 if (sfxOnBtn.pressed)
                 {
@@ -940,6 +1039,7 @@ namespace GoatTiger
         void showSettingsOverlay()
         {
             currentScreen = gameScreens.settingsOverlay;
+            resetSettings();
         }
 
         void showHelpScreen()
@@ -956,12 +1056,75 @@ namespace GoatTiger
             }
             else
             {
+                resetContinueOverlay();
                 currentScreen = gameScreens.continueOverlay;
             }
         }
 
-        void winnersOverlayTouchInputHandler()
+
+        void resetWinnersOverlay()
         {
+            overlayBG1Pos.Y = -400f;
+            tigersWonTextPos.Y = overlayBG1Pos.Y + 20;
+            goatsWonTextPos.Y = overlayBG1Pos.Y + 20;
+            gameDrawnTextPos.Y = overlayBG1Pos.Y + 20;
+
+            menuBtn.setRectByPos(280, (int)overlayBG1Pos.Y + 110);
+            newGameBtn.setRectByPos(440, (int)overlayBG1Pos.Y + 110);
+
+            winnersClosing = false;
+
+        }
+
+        void updateWinnersOverlay(GameTime gameTime)
+        {
+            if (winnersClosing)
+            {
+                overlayBG1Pos -= settingsVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (overlayBG1Pos.Y <= -400)
+                {
+                    overlayBG1Pos.Y = -400;
+                    currentScreen = nextScreen;
+                }
+            }
+            else
+            {
+                overlayBG1Pos += settingsVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (overlayBG1Pos.Y >= 110)
+                {
+                    overlayBG1Pos.Y = 110;
+                }
+            }
+            System.Diagnostics.Debug.WriteLine("move by cpu: " + gameTime.ElapsedGameTime.TotalSeconds);
+
+            tigersWonTextPos.Y = overlayBG1Pos.Y + 20;
+            goatsWonTextPos.Y = overlayBG1Pos.Y + 20;
+            gameDrawnTextPos.Y = overlayBG1Pos.Y + 20;
+
+            menuBtn.setRectByPos(280, (int)overlayBG1Pos.Y + 110);
+            newGameBtn.setRectByPos(440, (int)overlayBG1Pos.Y + 110);
+
+        }
+
+        void winnersOverlayTouchInputHandler(GameTime gameTime)
+        {
+
+            updateWinnersOverlay(gameTime);
+
+            EmitterLoc.X += 30;
+            EmitterLoc.Y += 30;
+            if (EmitterLoc.X > 800)
+            {
+                EmitterLoc.X = 0;
+            }
+            if (EmitterLoc.Y > 480)
+            {
+                EmitterLoc.Y = 0;
+            }
+            starParticleEngine.EmitterLocation = EmitterLoc;
+            starParticleEngine.Update();
+
+
             TouchCollection touches = TouchPanel.GetState();
             
             if (touches.Count > 0)
@@ -979,7 +1142,9 @@ namespace GoatTiger
                 {
                     newGameBtn.pressed = false;
                     resetCurrentGame();
-                    currentScreen = gameScreens.gamePlayScreen;
+
+                    winnersClosing = true;
+                    nextScreen = gameScreens.gamePlayScreen;
                 }
                 if (menuBtn.pressed)
                 {
@@ -987,13 +1152,58 @@ namespace GoatTiger
                     
                     resetCurrentGame();
                     stashCurrentGame();
-                    currentScreen = gameScreens.mainMenuScreen;
+
+                    winnersClosing = true;
+                    nextScreen = gameScreens.mainMenuScreen;
                 }
             }
         }
 
-        void continueOverlayTouchInputHandler()
+        void resetContinueOverlay()
         {
+            overlayBG1Pos.Y = -400f;
+            continueTextPos.Y = overlayBG1Pos.Y + 20;
+
+            newGameBtn.setRectByPos(280, (int)overlayBG1Pos.Y + 110);
+            resumeBtn.setRectByPos(440, (int)overlayBG1Pos.Y + 110);
+
+            continueClosing = false;
+
+        }
+
+        void updateContinueOverlay(GameTime gameTime)
+        {
+            if (continueClosing)
+            {
+                overlayBG1Pos -= settingsVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (overlayBG1Pos.Y <= -400)
+                {
+                    overlayBG1Pos.Y = -400;
+                    currentScreen = nextScreen;
+                }
+            }
+            else
+            {
+                overlayBG1Pos += settingsVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (overlayBG1Pos.Y >= 110)
+                {
+                    overlayBG1Pos.Y = 110;
+                }
+            }
+            System.Diagnostics.Debug.WriteLine("move by cpu: " + gameTime.ElapsedGameTime.TotalSeconds);
+
+            continueTextPos.Y = overlayBG1Pos.Y + 20;
+
+            newGameBtn.setRectByPos(280, (int)overlayBG1Pos.Y + 110);
+            resumeBtn.setRectByPos(440, (int)overlayBG1Pos.Y + 110);
+            
+
+        }
+        void continueOverlayTouchInputHandler(GameTime gameTime)
+        {
+
+            updateContinueOverlay(gameTime);
+
             TouchCollection touches = TouchPanel.GetState();
 
             if (touches.Count > 0)
@@ -1011,19 +1221,75 @@ namespace GoatTiger
                 {
                     newGameBtn.pressed = false;
                     resetCurrentGame();
-                    currentScreen = gameScreens.gamePlayScreen;
+
+                    continueClosing = true;
+                    nextScreen = gameScreens.gamePlayScreen;
                 }
                 
                 if (resumeBtn.pressed)
                 {
                     resumeBtn.pressed = false;
-                    currentScreen = gameScreens.gamePlayScreen;
+
+                    continueClosing = true;
+                    nextScreen = gameScreens.gamePlayScreen;
                 }
             }
         }
 
-        void pausedOverlayTouchInputHandler()
+        void resetPause(){
+
+            //spriteBatch.Draw(overlayBGtexture, Vector2.Zero, Color.White);
+            //spriteBatch.Draw(overlayBG1texture, overlayBG1Pos, Color.White);    
+            //spriteBatch.Draw(pausedText, pausedTextPos, Color.White);
+
+            overlayBG1Pos.Y = -400f;
+            //menuBtn.setRectByPos(240, 240);
+            //newGameBtn.setRectByPos(360, 240);
+            //resumeBtn.setRectByPos(480, 240);
+            pausedTextPos.Y = overlayBG1Pos.Y + 20;
+            menuBtn.setRectByPos(240, (int)overlayBG1Pos.Y + 110);
+            newGameBtn.setRectByPos(360, (int)overlayBG1Pos.Y + 110);
+            resumeBtn.setRectByPos(480, (int)overlayBG1Pos.Y + 110);
+
+            pauseClosing = false;
+
+        }
+
+        void updatePause(GameTime gameTime)
         {
+            if (pauseClosing)
+            {
+                overlayBG1Pos -= settingsVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (overlayBG1Pos.Y <= -400)
+                {
+                    overlayBG1Pos.Y = -400;
+                    currentScreen = nextScreen;
+                }
+            }
+            else
+            {
+                overlayBG1Pos += settingsVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (overlayBG1Pos.Y >= 110)
+                {
+                    overlayBG1Pos.Y = 110;
+                }
+            }
+            System.Diagnostics.Debug.WriteLine("move by cpu: " + gameTime.ElapsedGameTime.TotalSeconds);
+
+            pausedTextPos.Y = overlayBG1Pos.Y + 20;
+            menuBtn.setRectByPos(240, (int)overlayBG1Pos.Y + 110);
+            newGameBtn.setRectByPos(360, (int)overlayBG1Pos.Y + 110);
+            resumeBtn.setRectByPos(480, (int)overlayBG1Pos.Y + 110);
+
+
+        }
+
+        void pausedOverlayTouchInputHandler(GameTime gameTime)
+        {
+
+            //toto
+            updatePause(gameTime);
+
             TouchCollection touches = TouchPanel.GetState();
             
             if ( touches.Count > 0)
@@ -1042,34 +1308,60 @@ namespace GoatTiger
                 {
                     newGameBtn.pressed = false;
                     resetCurrentGame();
-                    currentScreen = gameScreens.gamePlayScreen;
+
+                    pauseClosing = true;
+                    nextScreen = gameScreens.gamePlayScreen;
                 }
                 if (menuBtn.pressed)
                 {
                     menuBtn.pressed = false;
                     
                     stashCurrentGame();
-                    currentScreen = gameScreens.mainMenuScreen;
+
+                    pauseClosing = true;
+                    nextScreen = gameScreens.mainMenuScreen;
                 }
                 if (resumeBtn.pressed)
                 {
                     resumeBtn.pressed = false;
-                    currentScreen = gameScreens.gamePlayScreen;
+
+                    pauseClosing = true;
+                    nextScreen = gameScreens.gamePlayScreen;
+                    //currentScreen = gameScreens.gamePlayScreen;
                 }
             }
         }
 
-        void getInputAndUpdateGame()
+        void getInputAndUpdateGame(GameTime gameTime)
         {
-            
+            //todo
             if (newMoveDone)
             {
                 currentBoard.gameWon = CheckForWin();
+                effect.Play();
                 newMoveDone = false;
+                //if (prevtime != null)
+                //{
+                //    System.Diagnostics.Debug.WriteLine(prevTotSeconds + "move by cpu prev time " + (gameTime.TotalGameTime.TotalSeconds - prevTotSeconds));
+                //    double diff = gameTime.TotalGameTime.TotalSeconds - prevTotSeconds;
+                //    if (diff > 0.5)
+                //    {
+                
+                //        currentBoard = nextBoard;
+                //        effect.Play();
+                //    }
+                //}
+                //else
+                //{
+                //    newMoveDone = false;
+                //}
+                
             }
+
             if (currentBoard.gameWon)
             {
                 currentScreen = gameScreens.winnersOverlay;
+                resetWinnersOverlay();
                 DeleteCurrentSavedFile();
                 return;
             }
@@ -1106,9 +1398,13 @@ namespace GoatTiger
                     }
                     
                 }
-
+                prevtime = gameTime;
+                //prevTotSeconds = gameTime.TotalGameTime.TotalSeconds;
+                System.Diagnostics.Debug.WriteLine("value time elapse"+gameTime.ElapsedGameTime.TotalSeconds);
+                System.Diagnostics.Debug.WriteLine("value time elapse" + gameTime.TotalGameTime.TotalSeconds);
                 //find diff of position
                 currentBoard = next;
+                //nextBoard = next;
                 newMoveDone = true;
                 goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
 
@@ -1206,6 +1502,10 @@ namespace GoatTiger
                                     
                                     currentBoard = next;
                                     newMoveDone = true;
+                                    System.Diagnostics.Debug.WriteLine("value time elapse" + gameTime.TotalGameTime.TotalSeconds);
+                                    prevtime = gameTime;
+                                    prevTotSeconds = gameTime.TotalGameTime.TotalSeconds;
+
                                     goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                                 }
 
@@ -1243,6 +1543,8 @@ namespace GoatTiger
                                             gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
                                             currentBoard = next;
                                             newMoveDone = true;
+                                            prevTotSeconds = gameTime.TotalGameTime.TotalSeconds;
+                                            System.Diagnostics.Debug.WriteLine("value time elapse" + gameTime.TotalGameTime.TotalSeconds);
                                             goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
                                         }
                                     }
@@ -1307,7 +1609,7 @@ namespace GoatTiger
         bool CheckForWin()
         {
             //check if tiger won
-            if (currentBoard.mGoatsIntoBoard - getGoatCount() >= 9)
+            if (currentBoard.mGoatsIntoBoard - getGoatCount() >= 5)
             {
                     winner = nodeState.tiger;
                     return true;
@@ -1410,7 +1712,7 @@ namespace GoatTiger
             if (currentScreen == gameScreens.mainMenuScreen
                 || currentScreen == gameScreens.settingsOverlay)
             {
-                DrawMainScreen();
+                DrawMainScreen(gameTime);
             }
             else if (currentScreen == gameScreens.helpScreen)
             {
@@ -1449,11 +1751,10 @@ namespace GoatTiger
 
             base.Draw(gameTime);
         }
-        void DrawMainScreen()
+        void DrawMainScreen(GameTime gameTime)
         {
-            Rectangle screenRectangle = new Rectangle(0, 0, screenWidth,screenHeight);
-            //spriteBatch.Draw(mainMenuBackground, screenRectangle, Color.White);
-            spriteBatch.Draw(mainMenuBackground, new Vector2(0, 0), Color.White);
+            
+            spriteBatch.Draw(mainMenuBackground, Vector2.Zero, Color.White);
             twoPlayerBtn.draw(spriteBatch);
             onePlayerBtnGoat.draw(spriteBatch);
             onePlayerBtnTiger.draw(spriteBatch);
@@ -1463,7 +1764,7 @@ namespace GoatTiger
             if (currentScreen == gameScreens.settingsOverlay)
             {
                 //show settings overlay
-                DrawSettingsOverlay();
+                DrawSettingsOverlay(gameTime);
 
             }
             
@@ -1473,11 +1774,13 @@ namespace GoatTiger
             
 
         }
-        void DrawSettingsOverlay()
+        void DrawSettingsOverlay(GameTime gameTime)
         {
-            Rectangle screenArea = new Rectangle(0, 0, screenWidth, screenHeight);
-            spriteBatch.Draw(overlayBGtexture, screenArea, Color.White);
-            //spriteBatch.Draw(overlayBG1texture, overlayBG1Pos, Color.White);
+            System.Diagnostics.Debug.WriteLine("move by cpu draw seconds: " + gameTime.ElapsedGameTime.TotalSeconds);
+            //toto
+            //Rectangle screenArea = new Rectangle(0, 0, screenWidth, screenHeight);
+            spriteBatch.Draw(overlayBGtexture, Vector2.Zero, Color.White);
+            
             spriteBatch.Draw(overlayBG2texture,overlayBG2Pos,Color.White);
             spriteBatch.Draw(settingsText, settingsTextPos, Color.White);
             spriteBatch.Draw(levelText, levelTextPos, Color.White);
@@ -1517,8 +1820,10 @@ namespace GoatTiger
         }
         void DrawWonOverlay()
         {
-            Rectangle screenArea = new Rectangle(0, 0, screenWidth, screenHeight);
-            spriteBatch.Draw(overlayBGtexture, screenArea, Color.White);
+            
+            spriteBatch.Draw(overlayBGtexture, Vector2.Zero, Color.White);
+
+            starParticleEngine.Draw(spriteBatch);
             spriteBatch.Draw(overlayBG1texture, overlayBG1Pos, Color.White);
             if ( winner == nodeState.tiger)
             {
@@ -1532,39 +1837,34 @@ namespace GoatTiger
             {
                 spriteBatch.Draw(gameDrawnText, gameDrawnTextPos, Color.White);
             }
-            menuBtn.setRectByPos(280, 240);
+            
             menuBtn.draw(spriteBatch);
-            newGameBtn.setRectByPos(440, 240);
             newGameBtn.draw(spriteBatch);
+
+            
         }
 
         void DrawContinueOverlay()
         {
-            Rectangle screenArea = new Rectangle(0, 0, screenWidth, screenHeight);
-            spriteBatch.Draw(overlayBGtexture, screenArea, Color.White);
+            
+            spriteBatch.Draw(overlayBGtexture, Vector2.Zero, Color.White);
             spriteBatch.Draw(overlayBG1texture, overlayBG1Pos, Color.White);
 
             spriteBatch.Draw(continueText, continueTextPos, Color.White);
 
-            newGameBtn.setRectByPos(280, 240);
             newGameBtn.draw(spriteBatch);
-            resumeBtn.setRectByPos(440, 240);
             resumeBtn.draw(spriteBatch);
         }
 
         void DrawPauseOverlay()
         {
-            Rectangle screenArea = new Rectangle(0, 0, screenWidth, screenHeight);
-            spriteBatch.Draw(overlayBGtexture, screenArea, Color.White);
+            spriteBatch.Draw(overlayBGtexture, Vector2.Zero, Color.White);
             spriteBatch.Draw(overlayBG1texture, overlayBG1Pos, Color.White);
             
             spriteBatch.Draw(pausedText, pausedTextPos, Color.White);
 
-            menuBtn.setRectByPos(240, 240);
             menuBtn.draw(spriteBatch);
-            newGameBtn.setRectByPos(360, 240);
             newGameBtn.draw(spriteBatch);
-            resumeBtn.setRectByPos(480, 240);
             resumeBtn.draw(spriteBatch);
 
         }
