@@ -27,7 +27,7 @@
         <TemplateType5>
           <BackgroundImageURI IsRelative="true" IsResource="false">tileIcon.png</BackgroundImageURI>
           <Count>0</Count>
-          <Title>.</Title>
+          <Title>Goats vs Tigers</Title>
         </TemplateType5>
       </PrimaryToken>
     </Tokens>

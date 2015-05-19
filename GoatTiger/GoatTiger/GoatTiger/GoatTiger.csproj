@@ -21,7 +21,7 @@
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <XnaWindowsPhoneManifestTemplate>Properties\WMAppManifest.xml</XnaWindowsPhoneManifestTemplate>
     <TileImage>tileIcon.png</TileImage>
-    <TileTitle>.</TileTitle>
+    <TileTitle>Goats vs Tigers</TileTitle>
     <SupportedCultures>
     </SupportedCultures>
     <ApplicationIcon>Game.ico</ApplicationIcon>
