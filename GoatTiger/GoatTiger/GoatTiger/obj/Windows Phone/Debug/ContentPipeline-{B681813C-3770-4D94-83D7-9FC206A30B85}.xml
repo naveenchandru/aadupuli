@@ -586,6 +586,42 @@
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\63531__florian-reinke__click1.xnb</Output>
       <Time>2015-05-17T00:29:07.1956772+05:30</Time>
     </Item>
+    <Item>
+      <Source>chime.wav</Source>
+      <Name>chime</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\chime.xnb</Output>
+      <Time>2015-05-18T23:50:03.7384837+05:30</Time>
+    </Item>
+    <Item>
+      <Source>creditsBtn.png</Source>
+      <Name>creditsBtn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\creditsBtn.xnb</Output>
+      <Time>2015-05-19T23:10:09.2942776+05:30</Time>
+    </Item>
+    <Item>
+      <Source>creditsBtnPressed.png</Source>
+      <Name>creditsBtnPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\creditsBtnPressed.xnb</Output>
+      <Time>2015-05-19T23:10:09.306851+05:30</Time>
+    </Item>
+    <Item>
+      <Source>creditsSlide.png</Source>
+      <Name>creditsSlide</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\creditsSlide.xnb</Output>
+      <Time>2015-05-19T23:55:39.7239071+05:30</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{B681813C-3770-4D94-83D7-9FC206A30B85}</ContentProjectGUID>

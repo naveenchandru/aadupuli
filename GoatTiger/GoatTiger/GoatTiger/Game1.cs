@@ -20,7 +20,7 @@ namespace GoatTiger
 
     enum nodeState { none, goat, tiger };
     enum gameMode { twoPlayers, vsTiger, vsGoat };
-    enum gameScreens { mainMenuScreen, gamePlayScreen, chooseSideOverlay, winnersOverlay, helpScreen, pauseOverlay, continueOverlay, settingsOverlay };
+    enum gameScreens { mainMenuScreen, gamePlayScreen, chooseSideOverlay, winnersOverlay, helpScreen, pauseOverlay, continueOverlay, settingsOverlay, creditsScreen };
 
     
 
@@ -72,10 +72,12 @@ namespace GoatTiger
         gButton twoPlayerBtn;
         gButton onePlayerBtnGoat;
         gButton onePlayerBtnTiger;
-        gButton undoBtn,settingsBtn,sfxOnBtn,sfxOffBtn,helpBtn;
+        gButton undoBtn,settingsBtn,sfxOnBtn,sfxOffBtn,helpBtn,creditsBtn;
         gButton levelBtn1, levelBtn2, levelBtn3;
 
         ScrollContainer helpSection;
+
+        CreditsSection creditsection;
 
         SpriteFont goatsCountFont;
         Vector2 goatsRemainTextPos, goatsCapturedTextPos, overlayBG1Pos, overlayBG2Pos, tigersWonTextPos, goatsWonTextPos, pausedTextPos, continueTextPos, gameDrawnTextPos, settingsTextPos, levelTextPos, sfxTextPos, settingsVelocity;
@@ -83,7 +85,7 @@ namespace GoatTiger
         StarParticleEngine starParticleEngine;
         Vector2 EmitterLoc;
 
-        private SoundEffect effect;
+        private SoundEffect effect,chimeEffect;
         GameTime prevtime;
         double prevTotSeconds;
         bool pieceTransition=false;
@@ -148,13 +150,14 @@ namespace GoatTiger
             //currentMode = gameMode.vsGoat;
 
             helpSection = new ScrollContainer();
+            creditsection = new CreditsSection();
 
             onePlayerBtnGoat = new gButton(430, 120);
             onePlayerBtnTiger = new gButton(410, 220);
             twoPlayerBtn = new gButton(390,320);
             settingsBtn = new gButton(10,10);
             helpBtn = new gButton(100, 10);
-
+            creditsBtn = new gButton(100, 10);
 
             sfxOnBtn = new gButton(380,175);
             sfxOffBtn = new gButton(380,175);
@@ -521,13 +524,16 @@ namespace GoatTiger
             onePlayerBtnTiger.load("asTigerBtnShow", "asTigerBtnPressed", Content);
 
             helpSection.load(Content);
-
+            creditsection.load(Content);
 
             settingsBtn.load("settingsBtn", "settingsBtnPressed", Content);
             settingsBtn.setRect(new Rectangle(620, 20, 65, 65));
 
             helpBtn.load("helpBtn","helpBtnPressed",Content);
             helpBtn.setRect(new Rectangle(700, 20, 65, 65));
+
+            creditsBtn.load("creditsBtn", "creditsBtnPressed", Content);
+            creditsBtn.setRect(new Rectangle(10, 405, 157, 65));
 
             sfxOnBtn.load("sfxBtn", "sfxBtnPressed", Content);
             sfxOffBtn.load("sfxOffBtn", "sfxOffBtnPressed", Content);
@@ -576,6 +582,7 @@ namespace GoatTiger
 
             //sound efx
             effect = Content.Load<SoundEffect>("63531__florian-reinke__click1");
+            chimeEffect = Content.Load<SoundEffect>("chime");
 
             
         }
@@ -781,6 +788,10 @@ namespace GoatTiger
                 {
                     currentScreen = gameScreens.mainMenuScreen;
                 }
+                else if (currentScreen == gameScreens.creditsScreen)
+                {
+                    currentScreen = gameScreens.mainMenuScreen;
+                }
             }
 
             if (currentScreen == gameScreens.mainMenuScreen)
@@ -812,6 +823,10 @@ namespace GoatTiger
             {
                 helpScreenTouchHandler(gameTime);
             }
+            else if (currentScreen == gameScreens.creditsScreen)
+            {
+                //helpScreenTouchHandler(gameTime);
+            }
 
          
             base.Update(gameTime);
@@ -835,6 +850,7 @@ namespace GoatTiger
                 onePlayerBtnTiger.handeTouch(touch);
                 settingsBtn.handeTouch(touch);
                 helpBtn.handeTouch(touch);
+                creditsBtn.handeTouch(touch);
 
             }
             else
@@ -885,6 +901,13 @@ namespace GoatTiger
                     helpBtn.pressed = false;
                     showHelpScreen();
                 }
+                if (creditsBtn.pressed)
+                {
+                    System.Diagnostics.Debug.WriteLine("credits button press");
+                    creditsBtn.pressed = false;
+                    showCreditsScreen();
+                }
+
 
                 
 
@@ -1045,6 +1068,10 @@ namespace GoatTiger
         void showHelpScreen()
         {
             currentScreen = gameScreens.helpScreen;
+        }
+        void showCreditsScreen()
+        {
+            currentScreen = gameScreens.creditsScreen;
         }
 
 
@@ -1338,7 +1365,14 @@ namespace GoatTiger
             if (newMoveDone)
             {
                 currentBoard.gameWon = CheckForWin();
-                effect.Play();
+                if (sfxStateOn)
+                {
+                    if (currentBoard.gameWon)
+                    {
+                        chimeEffect.Play();
+                    }
+                    effect.Play();
+                }
                 newMoveDone = false;
                 //if (prevtime != null)
                 //{
@@ -1719,6 +1753,10 @@ namespace GoatTiger
 
                 DrawHelpScreen(gameTime);
             }
+            else if (currentScreen == gameScreens.creditsScreen)
+            {
+                DrawCreditsScreen(gameTime);
+            }
             else if (currentScreen == gameScreens.gamePlayScreen
                 || currentScreen == gameScreens.pauseOverlay
                 || currentScreen == gameScreens.winnersOverlay
@@ -1760,6 +1798,7 @@ namespace GoatTiger
             onePlayerBtnTiger.draw(spriteBatch);
             settingsBtn.draw(spriteBatch);
             helpBtn.draw(spriteBatch);
+            creditsBtn.draw(spriteBatch);
 
             if (currentScreen == gameScreens.settingsOverlay)
             {
@@ -1811,6 +1850,11 @@ namespace GoatTiger
         void DrawHelpScreen(GameTime gameTime)
         {
             helpSection.draw(gameTime,spriteBatch);
+        }
+
+        void DrawCreditsScreen(GameTime gameTime)
+        {
+            creditsection.draw(gameTime, spriteBatch);
         }
         void DrawBoard()
         {
