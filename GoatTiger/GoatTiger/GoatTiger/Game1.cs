@@ -161,7 +161,7 @@ namespace GoatTiger
 
             sfxOnBtn = new gButton(380,175);
             sfxOffBtn = new gButton(380,175);
-            undoBtn = new gButton(660, 370);
+            undoBtn = new gButton(648, 403);
 
             //level
             levelBtn1 = new gButton(375, 265);
@@ -550,10 +550,10 @@ namespace GoatTiger
 
 
             //
-            goatsRemainTextPos = new Vector2(740, 190);
-            goatsCapturedTextPos = new Vector2(740, 310);
-            
-            goatsCountFont = Content.Load<SpriteFont>("GoatsCount");
+            goatsRemainTextPos = new Vector2(718, 248);
+            goatsCapturedTextPos = new Vector2(718, 346);
+
+            goatsCountFont = Content.Load<SpriteFont>("SpriteFont1");
 
             
             screenWidth = graphics.GraphicsDevice.PresentationParameters.BackBufferWidth;
@@ -1938,9 +1938,9 @@ namespace GoatTiger
             Vector2 FontOrigin1 = goatsCountFont.MeasureString(output1) / 2;
             Vector2 FontOrigin2 = goatsCountFont.MeasureString(output2) / 2;
             // Draw the string
-            spriteBatch.DrawString(goatsCountFont, output1, goatsRemainTextPos, Color.Black,
+            spriteBatch.DrawString(goatsCountFont, output1, goatsRemainTextPos, new Color(34, 192, 45),
                 0, FontOrigin1, 1.0f, SpriteEffects.None, 0.5f);
-            spriteBatch.DrawString(goatsCountFont, output2, goatsCapturedTextPos, Color.Black,
+            spriteBatch.DrawString(goatsCountFont, output2, goatsCapturedTextPos, new Color(255,42,42),
                 0, FontOrigin2, 1.0f, SpriteEffects.None, 0.5f);
 
 
