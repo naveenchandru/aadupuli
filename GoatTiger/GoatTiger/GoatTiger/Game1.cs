@@ -152,12 +152,12 @@ namespace GoatTiger
             helpSection = new ScrollContainer();
             creditsection = new CreditsSection();
 
-            onePlayerBtnGoat = new gButton(430, 120);
-            onePlayerBtnTiger = new gButton(410, 220);
-            twoPlayerBtn = new gButton(390,320);
-            settingsBtn = new gButton(10,10);
-            helpBtn = new gButton(100, 10);
-            creditsBtn = new gButton(100, 10);
+            onePlayerBtnGoat = new gButton(470, 120);
+            onePlayerBtnTiger = new gButton(490, 220);
+            twoPlayerBtn = new gButton(465,320);
+            settingsBtn = new gButton(555,20);
+            helpBtn = new gButton(480, 20);
+            creditsBtn = new gButton(630, 20);
 
             sfxOnBtn = new gButton(380,175);
             sfxOffBtn = new gButton(380,175);
@@ -527,13 +527,13 @@ namespace GoatTiger
             creditsection.load(Content);
 
             settingsBtn.load("settingsBtn", "settingsBtnPressed", Content);
-            settingsBtn.setRect(new Rectangle(620, 20, 65, 65));
+            //settingsBtn.setRect(new Rectangle(620, 20, 65, 65));
 
             helpBtn.load("helpBtn","helpBtnPressed",Content);
-            helpBtn.setRect(new Rectangle(700, 20, 65, 65));
+            //helpBtn.setRect(new Rectangle(700, 20, 65, 65));
 
             creditsBtn.load("creditsBtn", "creditsBtnPressed", Content);
-            creditsBtn.setRect(new Rectangle(10, 405, 157, 65));
+            //creditsBtn.setRect(new Rectangle(10, 405, 157, 65));
 
             sfxOnBtn.load("sfxBtn", "sfxBtnPressed", Content);
             sfxOffBtn.load("sfxOffBtn", "sfxOffBtnPressed", Content);
