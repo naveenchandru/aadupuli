@@ -27,7 +27,7 @@ namespace GoatTiger
             this.leftArrow = new gButton(10, 200);
             this.rightArrow = new gButton(713, 200);
             this.screens = new List<Texture2D>();
-            currentScreenPos = new Vector2(40, 0);
+            currentScreenPos = new Vector2(103, 480);
             preScreenPos = new Vector2(currentScreenPos.X - pageWidth, 0);
             nextScreenPos = new Vector2(currentScreenPos.X + pageWidth, 0);
             prepreScreenPos = new Vector2(currentScreenPos.X - 2 * pageWidth, 0);
@@ -103,6 +103,31 @@ namespace GoatTiger
         {
 
         }
+
+        public void reset()
+        {
+            currentScreenPos.Y = 480;
+        }
+
+        public void update(GameTime gameTime)
+        {
+            TouchCollection touches = TouchPanel.GetState();
+
+            if (touches.Count > 0)
+            {
+            
+            }
+            else
+            {
+                currentScreenPos.Y -= (float)gameTime.ElapsedGameTime.TotalSeconds * 100f;
+                if (currentScreenPos.Y <= -853)
+                {
+                    currentScreenPos.Y = 480;
+                }
+            }
+
+        }
+
         public void handleTouch(GameTime gameTime)
         {
             TouchCollection touches = TouchPanel.GetState();

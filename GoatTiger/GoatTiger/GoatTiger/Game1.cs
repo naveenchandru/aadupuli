@@ -164,15 +164,15 @@ namespace GoatTiger
             undoBtn = new gButton(648, 403);
 
             //level
-            levelBtn1 = new gButton(375, 265);
-            levelBtn2 = new gButton(455, 265);
-            levelBtn3 = new gButton(535, 265);
+            levelBtn1 = new gButton(378, 265);
+            levelBtn2 = new gButton(458, 265);
+            levelBtn3 = new gButton(538, 265);
 
             menuBtn = new gButton(280,240);
             newGameBtn = new gButton(440, 240);
 
             resumeBtn = new gButton(440,240);
-            okBtn = new gButton(640,320);
+            okBtn = new gButton(552,320);
             
             //settings level
             switch (level)
@@ -560,16 +560,16 @@ namespace GoatTiger
             screenHeight = graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
 
             overlayBG1Pos = new Vector2((screenWidth - 385) / 2, (screenHeight - 245) / 2);
-            overlayBG2Pos = new Vector2((screenWidth - 564) / 2, (screenHeight - 347) / 2);
+            overlayBG2Pos = new Vector2((screenWidth - 564) / 2, (screenHeight - 377) / 2);
             tigersWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 340)/2, (screenHeight - 245) / 2 + 30);
             goatsWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 339) / 2, (screenHeight - 245) / 2 + 30);
             gameDrawnTextPos = new Vector2(overlayBG1Pos.X + (385 - 319) / 2, (screenHeight - 245) / 2 + 30);
             pausedTextPos = new Vector2(overlayBG1Pos.X + (385 - 228) / 2, (screenHeight - 245) / 2 + 30);
             continueTextPos = new Vector2(overlayBG1Pos.X + (385 - 293) / 2, (screenHeight - 245) / 2 + 30);
-            settingsTextPos = new Vector2(overlayBG2Pos.X + (564 - 240) / 2, (screenHeight - 370) / 2 + 30);
+            settingsTextPos = new Vector2(overlayBG2Pos.X + (580 - 240) / 2, (screenHeight - 370) / 2 + 30);
             
-            sfxTextPos = new Vector2(overlayBG2Pos.X + (100 ) / 2, (screenHeight - 160) / 2 + 30);
-            levelTextPos = new Vector2(overlayBG2Pos.X + (100) / 2, (screenHeight) / 2 + 35);
+            sfxTextPos = new Vector2(overlayBG2Pos.X + (180 ) / 2, (screenHeight - 160) / 2 + 30);
+            levelTextPos = new Vector2(overlayBG2Pos.X + (180) / 2, (screenHeight) / 2 + 35);
 
             settingsVelocity = new Vector2(0,2000);
 
@@ -825,7 +825,7 @@ namespace GoatTiger
             }
             else if (currentScreen == gameScreens.creditsScreen)
             {
-                //helpScreenTouchHandler(gameTime);
+                updateCreditsScreen(gameTime);
             }
 
          
@@ -917,6 +917,11 @@ namespace GoatTiger
 
         }
 
+        void updateCreditsScreen(GameTime gameTime)
+        {
+            creditsection.update(gameTime);
+        }
+
         void helpScreenTouchHandler(GameTime gameTime)
         {
 
@@ -933,7 +938,7 @@ namespace GoatTiger
             sfxOnBtn.setRectByPos(sfxOnBtn.X, (int)overlayBG2Pos.Y + 110);
             sfxOffBtn.setRectByPos(sfxOffBtn.X, (int)overlayBG2Pos.Y + 110);
 
-            okBtn.setRectByPos(okBtn.X, (int)overlayBG2Pos.Y + 255);
+            okBtn.setRectByPos(okBtn.X, (int)overlayBG2Pos.Y + 320);
 
             levelBtn1.setRectByPos(levelBtn1.X, (int)overlayBG2Pos.Y + 200);
             levelBtn2.setRectByPos(levelBtn2.X, (int)overlayBG2Pos.Y + 200);
@@ -957,24 +962,24 @@ namespace GoatTiger
             else
             {
                 overlayBG2Pos += settingsVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (overlayBG2Pos.Y >= 66)
+                if (overlayBG2Pos.Y >= 65)
                 {
-                    overlayBG2Pos.Y = 66;
+                    overlayBG2Pos.Y = 65;
                 }
             }
             System.Diagnostics.Debug.WriteLine("move by cpu: " + gameTime.ElapsedGameTime.TotalSeconds);
 
             settingsTextPos.Y = overlayBG2Pos.Y + 20;
             levelTextPos.Y = overlayBG2Pos.Y + 210;
-            sfxTextPos.Y = overlayBG2Pos.Y + 125;
-            sfxOnBtn.setRectByPos(sfxOnBtn.X, (int)overlayBG2Pos.Y + 110);
-            sfxOffBtn.setRectByPos(sfxOffBtn.X, (int)overlayBG2Pos.Y + 110);
+            sfxTextPos.Y = overlayBG2Pos.Y + 110;
+            sfxOnBtn.setRectByPos(sfxOnBtn.X, (int)overlayBG2Pos.Y + 91);
+            sfxOffBtn.setRectByPos(sfxOffBtn.X, (int)overlayBG2Pos.Y + 91);
 
-            okBtn.setRectByPos(okBtn.X, (int)overlayBG2Pos.Y + 255);
+            okBtn.setRectByPos(okBtn.X, (int)overlayBG2Pos.Y + 280);
 
-            levelBtn1.setRectByPos(levelBtn1.X, (int)overlayBG2Pos.Y + 200);
-            levelBtn2.setRectByPos(levelBtn2.X, (int)overlayBG2Pos.Y + 200);
-            levelBtn3.setRectByPos(levelBtn3.X, (int)overlayBG2Pos.Y + 200);
+            levelBtn1.setRectByPos(levelBtn1.X, (int)overlayBG2Pos.Y + 194);
+            levelBtn2.setRectByPos(levelBtn2.X, (int)overlayBG2Pos.Y + 194);
+            levelBtn3.setRectByPos(levelBtn3.X, (int)overlayBG2Pos.Y + 194);
 
 
         }
@@ -1072,6 +1077,7 @@ namespace GoatTiger
         void showCreditsScreen()
         {
             currentScreen = gameScreens.creditsScreen;
+            creditsection.reset();
         }
 
 
