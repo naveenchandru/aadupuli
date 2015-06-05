@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
 using System.IO.IsolatedStorage;
+using Microsoft.Phone.Tasks;
 
 namespace GoatTiger
 {
@@ -72,7 +73,7 @@ namespace GoatTiger
         gButton twoPlayerBtn;
         gButton onePlayerBtnGoat;
         gButton onePlayerBtnTiger;
-        gButton undoBtn,settingsBtn,sfxOnBtn,sfxOffBtn,helpBtn,creditsBtn;
+        gButton undoBtn,settingsBtn,sfxOnBtn,sfxOffBtn,helpBtn,creditsBtn,rateBtn;
         gButton levelBtn1, levelBtn2, levelBtn3;
 
         ScrollContainer helpSection;
@@ -158,6 +159,7 @@ namespace GoatTiger
             settingsBtn = new gButton(555,20);
             helpBtn = new gButton(480, 20);
             creditsBtn = new gButton(630, 20);
+            rateBtn = new gButton(10, 10);
 
             sfxOnBtn = new gButton(380,175);
             sfxOffBtn = new gButton(380,175);
@@ -533,6 +535,7 @@ namespace GoatTiger
             //helpBtn.setRect(new Rectangle(700, 20, 65, 65));
 
             creditsBtn.load("creditsBtn", "creditsBtnPressed", Content);
+            rateBtn.load("rateBtn", "rateBtnPressed", Content);
             //creditsBtn.setRect(new Rectangle(10, 405, 157, 65));
 
             sfxOnBtn.load("sfxBtn", "sfxBtnPressed", Content);
@@ -561,11 +564,11 @@ namespace GoatTiger
 
             overlayBG1Pos = new Vector2((screenWidth - 385) / 2, (screenHeight - 245) / 2);
             overlayBG2Pos = new Vector2((screenWidth - 564) / 2, (screenHeight - 377) / 2);
-            tigersWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 340)/2, (screenHeight - 245) / 2 + 30);
-            goatsWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 339) / 2, (screenHeight - 245) / 2 + 30);
-            gameDrawnTextPos = new Vector2(overlayBG1Pos.X + (385 - 319) / 2, (screenHeight - 245) / 2 + 30);
-            pausedTextPos = new Vector2(overlayBG1Pos.X + (385 - 228) / 2, (screenHeight - 245) / 2 + 30);
-            continueTextPos = new Vector2(overlayBG1Pos.X + (385 - 293) / 2, (screenHeight - 245) / 2 + 30);
+            tigersWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 364)/2, (screenHeight - 245) / 2 + 30);
+            goatsWonTextPos = new Vector2(overlayBG1Pos.X + (385 - 352) / 2, (screenHeight - 245) / 2 + 30);
+            gameDrawnTextPos = new Vector2(overlayBG1Pos.X + (385 - 326) / 2, (screenHeight - 245) / 2 + 30);
+            pausedTextPos = new Vector2(overlayBG1Pos.X + (385 - 219) / 2, (screenHeight - 245) / 2 + 30);
+            continueTextPos = new Vector2(overlayBG1Pos.X + (385 - 315) / 2, (screenHeight - 245) / 2 + 30);
             settingsTextPos = new Vector2(overlayBG2Pos.X + (580 - 240) / 2, (screenHeight - 370) / 2 + 30);
             
             sfxTextPos = new Vector2(overlayBG2Pos.X + (180 ) / 2, (screenHeight - 160) / 2 + 30);
@@ -765,6 +768,7 @@ namespace GoatTiger
                 else if (currentScreen == gameScreens.gamePlayScreen)
                 {
                     resetPause();
+                    possiblePositions.Clear();
                     currentScreen = gameScreens.pauseOverlay;
                 }
                 else if (currentScreen == gameScreens.pauseOverlay)
@@ -851,6 +855,7 @@ namespace GoatTiger
                 settingsBtn.handeTouch(touch);
                 helpBtn.handeTouch(touch);
                 creditsBtn.handeTouch(touch);
+                rateBtn.handeTouch(touch);
 
             }
             else
@@ -906,6 +911,12 @@ namespace GoatTiger
                     System.Diagnostics.Debug.WriteLine("credits button press");
                     creditsBtn.pressed = false;
                     showCreditsScreen();
+                }
+                if (rateBtn.pressed)
+                {
+                    System.Diagnostics.Debug.WriteLine("credits button press");
+                    rateBtn.pressed = false;
+                    showRateScreen();
                 }
 
 
@@ -1072,12 +1083,20 @@ namespace GoatTiger
 
         void showHelpScreen()
         {
+            helpSection.resetScreen();
             currentScreen = gameScreens.helpScreen;
         }
         void showCreditsScreen()
         {
             currentScreen = gameScreens.creditsScreen;
             creditsection.reset();
+        }
+
+        void showRateScreen()
+        {
+            MarketplaceReviewTask marketplaceReviewTask = new MarketplaceReviewTask();
+
+            marketplaceReviewTask.Show();
         }
 
 
@@ -1520,6 +1539,9 @@ namespace GoatTiger
                                             }
                                         }
 
+                                        //when touch for a piece is detected exit. prevent overlapping pieces touch
+                                        i = 5; j = 6;
+
                                     }
                                 }
 
@@ -1805,6 +1827,7 @@ namespace GoatTiger
             settingsBtn.draw(spriteBatch);
             helpBtn.draw(spriteBatch);
             creditsBtn.draw(spriteBatch);
+            rateBtn.draw(spriteBatch);
 
             if (currentScreen == gameScreens.settingsOverlay)
             {

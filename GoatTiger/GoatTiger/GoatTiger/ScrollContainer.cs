@@ -24,14 +24,14 @@ namespace GoatTiger
         //todo: this class accepts screens and provides a scrolling content
         public ScrollContainer()
         {
-            this.leftArrow = new gButton(10,200);
-            this.rightArrow = new gButton(713, 200);
+            this.leftArrow = new gButton(8,(480-66)/2);
+            this.rightArrow = new gButton(726, (480 - 66) / 2);
             this.screens = new List<Texture2D>();
-            currentScreenPos = new Vector2(40,0);
-            preScreenPos = new Vector2(currentScreenPos.X - pageWidth, 0);
-            nextScreenPos = new Vector2(currentScreenPos.X + pageWidth, 0);
-            prepreScreenPos = new Vector2(currentScreenPos.X - 2*pageWidth, 0);
-            nextnextScreenPos = new Vector2(currentScreenPos.X + 2*pageWidth, 0);
+            currentScreenPos = new Vector2(86,40);
+            preScreenPos = new Vector2(currentScreenPos.X - pageWidth, 40);
+            nextScreenPos = new Vector2(currentScreenPos.X + pageWidth, 40);
+            prepreScreenPos = new Vector2(currentScreenPos.X - 2*pageWidth, 40);
+            nextnextScreenPos = new Vector2(currentScreenPos.X + 2*pageWidth, 40);
             currentScreen = 0;
         }
         public void load(ContentManager Content)
@@ -45,7 +45,7 @@ namespace GoatTiger
             screens.Add(Content.Load<Texture2D>("slide3"));
             screens.Add(Content.Load<Texture2D>("slide4"));
             screens.Add(Content.Load<Texture2D>("slide5"));
-            screens.Add(Content.Load<Texture2D>("slide6"));
+            
             
             //screens.Add(Content.Load<Texture2D>("slide2"));
             //screens.Add(Content.Load<Texture2D>("slide3"));
@@ -103,6 +103,10 @@ namespace GoatTiger
             System.Diagnostics.Debug.WriteLine("lapsed::" + gametime.ElapsedGameTime);
             
         }
+        public void resetScreen()
+        {
+            currentScreen = 0;
+        }
         public void setScreens()
         {
             
@@ -137,7 +141,7 @@ namespace GoatTiger
                     }
 
                     rightArrow.pressed = false;
-                    currentScreenPos.X = 800-40;
+                    currentScreenPos.X = 800 - 86;
                     preScreenPos.X = currentScreenPos.X - pageWidth;
                     nextScreenPos.X = currentScreenPos.X + pageWidth;
                     prepreScreenPos.X = currentScreenPos.X - 2 * pageWidth;
@@ -155,8 +159,8 @@ namespace GoatTiger
                     {
                         currentScreen = 0;
                     }
-                    
-                    currentScreenPos.X = 40-800;
+
+                    currentScreenPos.X = 86 - 800;
                     preScreenPos.X = currentScreenPos.X - pageWidth;
                     nextScreenPos.X = currentScreenPos.X + pageWidth;
                     prepreScreenPos.X = currentScreenPos.X - 2 * pageWidth;
@@ -173,9 +177,9 @@ namespace GoatTiger
             if (transitionStarted)
             {
                 currentScreenPos.X -= (float)gameTime.ElapsedGameTime.TotalSeconds * 2000f;
-                if (currentScreenPos.X <= 40)
+                if (currentScreenPos.X <= 86)
                 {
-                    currentScreenPos.X = 40;
+                    currentScreenPos.X = 86;
                     transitionStarted = false;
                 }
                 preScreenPos.X = currentScreenPos.X - pageWidth;
@@ -186,9 +190,9 @@ namespace GoatTiger
             if (rightTransitionStarted)
             {
                 currentScreenPos.X += (float)gameTime.ElapsedGameTime.TotalSeconds * 2000f;
-                if (currentScreenPos.X >= 40)
+                if (currentScreenPos.X >= 86)
                 {
-                    currentScreenPos.X = 40;
+                    currentScreenPos.X = 86;
                     rightTransitionStarted = false;
                 }
                 preScreenPos.X = currentScreenPos.X - pageWidth;
