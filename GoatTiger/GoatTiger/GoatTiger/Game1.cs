@@ -90,7 +90,15 @@ namespace GoatTiger
         GameTime prevtime;
         double prevTotSeconds;
         bool pieceTransition=false;
-        
+        nodeState pieceInTransition = nodeState.tiger;
+        Vector2 fromPosition,toPosition;
+        Vector2 capGoatPosition, capGoatscale=new Vector2();
+        int capGoatAlpha = 0;
+
+        Vector2 pieceFrom = new Vector2(), pieceTo = new Vector2(), pieceVelocity = new Vector2(),pieceDirection= new Vector2(),capGoat=new Vector2(-1,-1);
+        int pieceXDirection=1,pieceYDirection=1;
+        float transitionSeconds = 0;
+        bool goatsStartFade = true;
 
         public Game1()
         {
@@ -1384,8 +1392,66 @@ namespace GoatTiger
             }
         }
 
+        void pieceTransitionHandler(GameTime gameTime)
+        {
+            
+            System.Diagnostics.Debug.WriteLine("from:" + pieceFrom.X + " " + pieceFrom.Y + "To:" + pieceTo.X+" " +pieceTo.Y);
+            pieceFrom += pieceVelocity;
+            if (transitionSeconds == 0)
+            {
+                fromPosition += pieceVelocity * 3 * 0;
+                transitionSeconds = 1;
+                goatsStartFade = false;
+            }
+            else
+            {
+                fromPosition += pieceVelocity * 3 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (capGoat.X != -1)
+                {
+
+                    Rectangle goatBounds = new Rectangle((int)capGoatPosition.X, (int)capGoatPosition.Y, goatpuck.Width, goatpuck.Height);
+                    Rectangle tigerBounds = new Rectangle((int)fromPosition.X, (int)fromPosition.Y, tigerpuck.Width, tigerpuck.Height);
+
+                    System.Diagnostics.Debug.WriteLine("Intersect:" + capGoatPosition.X + "  " + capGoatPosition.Y);
+                    System.Diagnostics.Debug.WriteLine("Intersects:" + fromPosition.X + "  " + fromPosition.Y); 
+
+                    if (goatBounds.Intersects(tigerBounds))
+                    {
+                        System.Diagnostics.Debug.WriteLine("Intersect happens:" + tigerBounds.X + "  " + tigerBounds.Y); 
+                        goatsStartFade = true;
+                    }
+                    if( goatsStartFade ){
+                        capGoatscale += new Vector2(5f, 5f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        capGoatAlpha -= 15;
+                    }
+
+
+                }
+
+
+            }
+
+            System.Diagnostics.Debug.WriteLine("capGoatScale:" + capGoatscale.X + "  " + capGoatscale.Y); 
+            
+
+            System.Diagnostics.Debug.WriteLine("from:" + fromPosition.X + " " + fromPosition.Y + "To:" + toPosition.X + " " + toPosition.Y+"xdir:"+pieceXDirection+"ydir:"+pieceYDirection);
+            if (((pieceXDirection==1) == (fromPosition.X >= toPosition.X)) && ((pieceYDirection==1) == (fromPosition.Y >= toPosition.Y)))
+            {
+                pieceTransition = false;
+                capGoat.X = -1;
+            }
+            
+
+        }
         void getInputAndUpdateGame(GameTime gameTime)
         {
+
+            if (pieceTransition)
+            {
+                pieceTransitionHandler(gameTime);
+                return;
+            }
+
             //todo
             if (newMoveDone)
             {
@@ -1452,11 +1518,51 @@ namespace GoatTiger
                         }
                         else
                         {
-                            System.Diagnostics.Debug.WriteLine("value: " + next.mValues[i,j] + "chaange i:" + i + "j:" + j);
+                            System.Diagnostics.Debug.WriteLine("prev value:"+ currentBoard.mValues[i,j]+"new value: " + next.mValues[i,j] + "chaange i:" + i + "j:" + j);
+                            if (currentBoard.mValues[i, j] == nodeState.tiger || next.mValues[i, j] == nodeState.tiger)
+                            {
+                                if (currentBoard.mValues[i, j] == nodeState.tiger)
+                                {
+                                    pieceFrom.X = i;
+                                    pieceFrom.Y = j;
+                                }
+                                else
+                                {
+                                    pieceTo.X = i;
+                                    pieceTo.Y = j;
+                                }
+                            }
+                            else
+                            {
+                                if (currentBoard.mValues[i, j] == nodeState.goat || next.mValues[i, j] == nodeState.goat)
+                                {
+                                    capGoat.X = i;
+                                    capGoat.Y = j;
+                                }
+                            }
                         }
                     }
                     
                 }
+                
+                fromPosition = getGridPosition((int)pieceFrom.X, (int)pieceFrom.Y);
+                toPosition = getGridPosition((int)pieceTo.X, (int)pieceTo.Y);
+                pieceVelocity = (toPosition - fromPosition) ;
+                transitionSeconds = 0.0f;
+                pieceXDirection = fromPosition.X > toPosition.X ? -1 : 1;
+                pieceYDirection = fromPosition.Y > toPosition.Y ? -1 : 1;
+                if (capGoat.X != -1)
+                {
+                    capGoatPosition = getGridPosition((int)capGoat.X, (int)capGoat.Y);
+                    capGoatscale.X = 1;
+                    capGoatscale.Y = 1;
+                    capGoatAlpha = 255;
+                }
+                
+                
+                //toPosition = pieceVelocity.Normalize();
+                pieceTransition = true;
+
                 prevtime = gameTime;
                 //prevTotSeconds = gameTime.TotalGameTime.TotalSeconds;
                 System.Diagnostics.Debug.WriteLine("value time elapse"+gameTime.ElapsedGameTime.TotalSeconds);
@@ -1504,6 +1610,7 @@ namespace GoatTiger
                                     currentBoard = next;
                                     newMoveDone = true;
                                     goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
+                                    pieceTransition = true;
                                 }
 
 
@@ -1793,6 +1900,10 @@ namespace GoatTiger
                 DrawBoard();
 
                 DrawPieces();
+                if (pieceTransition)
+                {
+                    DrawTransitionPieces();
+                }
                 DrawGoatsCount();
                 DrawPlayerTurn();
 
@@ -1975,6 +2086,20 @@ namespace GoatTiger
 
         }
 
+        void DrawTransitionPieces()
+        {
+            Vector2 origin = new Vector2(goatpuck.Width / 2, goatpuck.Height / 2);
+            spriteBatch.Draw(tigerpuck, fromPosition, null,Color.White, 0f, origin, new Vector2(1,1), SpriteEffects.None, 0f);
+
+            //Vector2 scaleFactor = new Vector2(0.5, 0.5);
+            
+            //Vector2 origin = new Vector2( capGoatscale.X,  capGoatscale.Y);
+            //Vector2 origin = new Vector2(4, 4) * capGoatscale;
+            if (capGoat.X != -1)
+            {
+                spriteBatch.Draw(goatpuck, capGoatPosition, null, new Color(255, 255, 255, capGoatAlpha), 0f, origin, capGoatscale, SpriteEffects.None, 0f);
+            }
+        }
         void DrawPieces(){
 
             Rectangle position;
@@ -1983,6 +2108,13 @@ namespace GoatTiger
             {
                 for (int j = 0; j < 6; j++)
                 {
+                    if (pieceTransition)
+                    {
+                        if ((pieceTo.X == i && pieceTo.Y == j) || (capGoat.X == i && capGoat.Y == j))
+                        {
+                            continue;
+                        }
+                    }
                     if (i == 0 && j > 0)
                         continue;
                     if ( i == 4 && ( j ==0 || j == 5 ) )
@@ -2098,6 +2230,90 @@ namespace GoatTiger
             x -= width / 2;
             y -= height / 2;
             return new Rectangle(x, y, width, height);
+        }
+
+        Vector2 getGridPosition(int row, int column)
+        {
+            int width = goatpuck.Width;
+            int height = goatpuck.Height;
+            int centerX = spriteBatch.GraphicsDevice.Viewport.Width / 2;
+            int centerY = spriteBatch.GraphicsDevice.Viewport.Height / 2;
+            int boardWidth = 400;
+            int pieceWidth = 0;
+
+            int x = 0;
+            int y = 0;
+            switch (row)
+            {
+                case 0:
+                    boardWidth = 300;
+                    pieceWidth = boardWidth / 1;
+                    //x = ((column+1)*pieceWidth) - (pieceWidth/2)- (width / 2) + ((spriteBatch.GraphicsDevice.Viewport.Width - boardWidth)/2);
+                    x = 310;
+                    y = 54;
+                    break;
+                case 1:
+                    y = 149;
+                    switch (column)
+                    {
+                        case 0: x = 118; break;
+                        case 1: x = 206; break;
+                        case 2: x = 276; break;
+                        case 3: x = 348; break;
+                        case 4: x = 415; break;
+                        case 5: x = 510; break;
+                        default: y = 0; break;
+                    }
+                    break;
+                case 2:
+                    y = 235;
+                    switch (column)
+                    {
+                        case 0: x = 76; break;
+                        case 1: x = 161; break;
+                        case 2: x = 260; break;
+                        case 3: x = 365; break;
+                        case 4: x = 456; break;
+                        case 5: x = 553; break;
+                        default: y = 0; break;
+                    }
+                    break;
+                case 3:
+                    y = 332;
+                    switch (column)
+                    {
+                        case 0: x = 46; break;
+                        case 1: x = 140; break;
+                        case 2: x = 246; break;
+                        case 3: x = 375; break;
+                        case 4: x = 483; break;
+                        case 5: x = 576; break;
+                        default: y = 0; break;
+                    }
+                    break;
+                case 4:
+                    y = 412;
+                    switch (column)
+                    {
+
+                        case 1: x = 123; break;
+                        case 2: x = 241; break;
+                        case 3: x = 381; break;
+                        case 4: x = 496; break;
+                        default: y = 0; break;
+                    }
+                    break;
+                default:
+                    boardWidth = 300;
+                    pieceWidth = boardWidth / 4;
+                    x = ((column + 1) * pieceWidth) - (pieceWidth / 2) - (width / 2) + ((spriteBatch.GraphicsDevice.Viewport.Width - boardWidth) / 2);
+                    break;
+            }
+
+            //int y = centerY + ((row - 3) * 60) - (height / 2);
+            //x -= width / 2;
+            //y -= height / 2;
+            return new Vector2(x,y);
         }
     }
 }
