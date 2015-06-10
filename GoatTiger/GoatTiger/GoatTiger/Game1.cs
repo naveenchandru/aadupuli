@@ -99,6 +99,7 @@ namespace GoatTiger
         int pieceXDirection=1,pieceYDirection=1;
         float transitionSeconds = 0;
         bool goatsStartFade = true;
+        nodeState currentPiece;
 
         public Game1()
         {
@@ -1394,7 +1395,6 @@ namespace GoatTiger
 
         void pieceTransitionHandler(GameTime gameTime)
         {
-            
             System.Diagnostics.Debug.WriteLine("from:" + pieceFrom.X + " " + pieceFrom.Y + "To:" + pieceTo.X+" " +pieceTo.Y);
             pieceFrom += pieceVelocity;
             if (transitionSeconds == 0)
@@ -1408,7 +1408,6 @@ namespace GoatTiger
                 fromPosition += pieceVelocity * 3 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (capGoat.X != -1)
                 {
-
                     Rectangle goatBounds = new Rectangle((int)capGoatPosition.X, (int)capGoatPosition.Y, goatpuck.Width, goatpuck.Height);
                     Rectangle tigerBounds = new Rectangle((int)fromPosition.X, (int)fromPosition.Y, tigerpuck.Width, tigerpuck.Height);
 
@@ -1443,6 +1442,77 @@ namespace GoatTiger
             
 
         }
+
+        void pieceTransitionStarter(Board next)
+        {
+            currentPiece = currentBoard.mTurnForPlayer ?nodeState.tiger:nodeState.goat;
+
+            if (currentBoard.mGoatsIntoBoard < 15 && !currentBoard.mTurnForPlayer)
+            {
+                pieceTransition = false;
+                return;
+            }
+
+            //find diff of position
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 6; j++)
+                {
+                    if (currentBoard.mValues[i, j] == next.mValues[i, j])
+                    {
+
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("prev value:" + currentBoard.mValues[i, j] + "new value: " + next.mValues[i, j] + "chaange i:" + i + "j:" + j);
+
+                        
+
+                        if (currentBoard.mValues[i, j] == currentPiece || next.mValues[i, j] == currentPiece)
+                        {
+                            if (currentBoard.mValues[i, j] == currentPiece)
+                            {
+                                pieceFrom.X = i;
+                                pieceFrom.Y = j;
+                            }
+                            else
+                            {
+                                pieceTo.X = i;
+                                pieceTo.Y = j;
+                            }
+                        }
+                        else
+                        {
+                            if (currentBoard.mValues[i, j] == nodeState.goat || next.mValues[i, j] == nodeState.goat)
+                            {
+                                capGoat.X = i;
+                                capGoat.Y = j;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            fromPosition = getGridPosition((int)pieceFrom.X, (int)pieceFrom.Y);
+            toPosition = getGridPosition((int)pieceTo.X, (int)pieceTo.Y);
+            pieceVelocity = (toPosition - fromPosition);
+            transitionSeconds = 0.0f;
+            pieceXDirection = fromPosition.X > toPosition.X ? -1 : 1;
+            pieceYDirection = fromPosition.Y > toPosition.Y ? -1 : 1;
+            if (capGoat.X != -1)
+            {
+                capGoatPosition = getGridPosition((int)capGoat.X, (int)capGoat.Y);
+                capGoatscale.X = 1;
+                capGoatscale.Y = 1;
+                capGoatAlpha = 255;
+            }
+
+
+            //toPosition = pieceVelocity.Normalize();
+            pieceTransition = true;
+        }
+            
         void getInputAndUpdateGame(GameTime gameTime)
         {
 
@@ -1507,61 +1577,10 @@ namespace GoatTiger
                 Board next = currentBoard.FindNextMove(level+1);
                 gameState.positionslist.Add(currentBoard.mValues);
                 gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
-                //find diff of position
-                for (int i = 0; i < 5; i++)
-                {
-                    for (int j = 0; j < 6; j++)
-                    {
-                        if (currentBoard.mValues[i, j] == next.mValues[i, j])
-                        {
 
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("prev value:"+ currentBoard.mValues[i,j]+"new value: " + next.mValues[i,j] + "chaange i:" + i + "j:" + j);
-                            if (currentBoard.mValues[i, j] == nodeState.tiger || next.mValues[i, j] == nodeState.tiger)
-                            {
-                                if (currentBoard.mValues[i, j] == nodeState.tiger)
-                                {
-                                    pieceFrom.X = i;
-                                    pieceFrom.Y = j;
-                                }
-                                else
-                                {
-                                    pieceTo.X = i;
-                                    pieceTo.Y = j;
-                                }
-                            }
-                            else
-                            {
-                                if (currentBoard.mValues[i, j] == nodeState.goat || next.mValues[i, j] == nodeState.goat)
-                                {
-                                    capGoat.X = i;
-                                    capGoat.Y = j;
-                                }
-                            }
-                        }
-                    }
-                    
-                }
+                pieceTransitionStarter(next);
+
                 
-                fromPosition = getGridPosition((int)pieceFrom.X, (int)pieceFrom.Y);
-                toPosition = getGridPosition((int)pieceTo.X, (int)pieceTo.Y);
-                pieceVelocity = (toPosition - fromPosition) ;
-                transitionSeconds = 0.0f;
-                pieceXDirection = fromPosition.X > toPosition.X ? -1 : 1;
-                pieceYDirection = fromPosition.Y > toPosition.Y ? -1 : 1;
-                if (capGoat.X != -1)
-                {
-                    capGoatPosition = getGridPosition((int)capGoat.X, (int)capGoat.Y);
-                    capGoatscale.X = 1;
-                    capGoatscale.Y = 1;
-                    capGoatAlpha = 255;
-                }
-                
-                
-                //toPosition = pieceVelocity.Normalize();
-                pieceTransition = true;
 
                 prevtime = gameTime;
                 //prevTotSeconds = gameTime.TotalGameTime.TotalSeconds;
@@ -1607,10 +1626,13 @@ namespace GoatTiger
                                     Board next = currentBoard.MakeMove(touchedPos, tobemovedpos);
                                     gameState.positionslist.Add(currentBoard.mValues);
                                     gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
+
+                                    pieceTransitionStarter(next);
                                     currentBoard = next;
                                     newMoveDone = true;
                                     goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
-                                    pieceTransition = true;
+                                    
+
                                 }
 
 
@@ -1668,7 +1690,9 @@ namespace GoatTiger
                                     Board next = currentBoard.MakeMove(touchedPos, tobemovedpos);
                                     gameState.positionslist.Add(currentBoard.mValues);
                                     gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
-                                    
+
+                                    pieceTransitionStarter(next);
+
                                     currentBoard = next;
                                     newMoveDone = true;
                                     System.Diagnostics.Debug.WriteLine("value time elapse" + gameTime.TotalGameTime.TotalSeconds);
@@ -2088,8 +2112,11 @@ namespace GoatTiger
 
         void DrawTransitionPieces()
         {
+            System.Diagnostics.Debug.WriteLine("Transition pieces");
             Vector2 origin = new Vector2(goatpuck.Width / 2, goatpuck.Height / 2);
-            spriteBatch.Draw(tigerpuck, fromPosition, null,Color.White, 0f, origin, new Vector2(1,1), SpriteEffects.None, 0f);
+            Texture2D transPiece = currentPiece== nodeState.tiger?tigerpuck:goatpuck;
+
+            spriteBatch.Draw(transPiece, fromPosition, null, Color.White, 0f, origin, new Vector2(1, 1), SpriteEffects.None, 0f);
 
             //Vector2 scaleFactor = new Vector2(0.5, 0.5);
             
