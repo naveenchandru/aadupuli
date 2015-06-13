@@ -95,7 +95,7 @@ namespace GoatTiger
         Vector2 capGoatPosition, capGoatscale=new Vector2();
         int capGoatAlpha = 0;
 
-        Vector2 pieceFrom = new Vector2(), pieceTo = new Vector2(), pieceVelocity = new Vector2(),pieceDirection= new Vector2(),capGoat=new Vector2(-1,-1);
+        Vector2 pieceFrom = new Vector2(), pieceTo = new Vector2(), pieceVelocity = new Vector2(),pieceDirection= new Vector2(),capGoat=new Vector2(-1,-1),dropGoat=new Vector2(-1,-1);
         int pieceXDirection=1,pieceYDirection=1;
         float transitionSeconds = 0;
         bool goatsStartFade = true;
@@ -1405,27 +1405,37 @@ namespace GoatTiger
             }
             else
             {
-                fromPosition += pieceVelocity * 3 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (capGoat.X != -1)
+                if (dropGoat.X != -1)
                 {
-                    Rectangle goatBounds = new Rectangle((int)capGoatPosition.X, (int)capGoatPosition.Y, goatpuck.Width, goatpuck.Height);
-                    Rectangle tigerBounds = new Rectangle((int)fromPosition.X, (int)fromPosition.Y, tigerpuck.Width, tigerpuck.Height);
-
-                    System.Diagnostics.Debug.WriteLine("Intersect:" + capGoatPosition.X + "  " + capGoatPosition.Y);
-                    System.Diagnostics.Debug.WriteLine("Intersects:" + fromPosition.X + "  " + fromPosition.Y); 
-
-                    if (goatBounds.Intersects(tigerBounds))
-                    {
-                        System.Diagnostics.Debug.WriteLine("Intersect happens:" + tigerBounds.X + "  " + tigerBounds.Y); 
-                        goatsStartFade = true;
-                    }
-                    if( goatsStartFade ){
-                        capGoatscale += new Vector2(5f, 5f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        capGoatAlpha -= 15;
-                    }
-
-
+                    capGoatscale -= new Vector2(5f, 5f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                   // capGoatAlpha -= 15;
                 }
+                else
+                {
+                    fromPosition += pieceVelocity * 3 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (capGoat.X != -1)
+                    {
+                        Rectangle goatBounds = new Rectangle((int)capGoatPosition.X, (int)capGoatPosition.Y, goatpuck.Width, goatpuck.Height);
+                        Rectangle tigerBounds = new Rectangle((int)fromPosition.X, (int)fromPosition.Y, tigerpuck.Width, tigerpuck.Height);
+
+                        System.Diagnostics.Debug.WriteLine("Intersect:" + capGoatPosition.X + "  " + capGoatPosition.Y);
+                        System.Diagnostics.Debug.WriteLine("Intersects:" + fromPosition.X + "  " + fromPosition.Y);
+
+                        if (goatBounds.Intersects(tigerBounds))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Intersect happens:" + tigerBounds.X + "  " + tigerBounds.Y);
+                            goatsStartFade = true;
+                        }
+                        if (goatsStartFade)
+                        {
+                            capGoatscale += new Vector2(5f, 5f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            capGoatAlpha -= 15;
+                        }
+
+
+                    }
+                }
+                
 
 
             }
@@ -1434,7 +1444,16 @@ namespace GoatTiger
             
 
             System.Diagnostics.Debug.WriteLine("from:" + fromPosition.X + " " + fromPosition.Y + "To:" + toPosition.X + " " + toPosition.Y+"xdir:"+pieceXDirection+"ydir:"+pieceYDirection);
-            if (((pieceXDirection==1) == (fromPosition.X >= toPosition.X)) && ((pieceYDirection==1) == (fromPosition.Y >= toPosition.Y)))
+            if (  dropGoat.X!=-1 )
+            {
+                if (capGoatscale.X <= 1)
+                {
+                    capGoatscale.X = 1;
+                    capGoatscale.Y = 1;
+                    dropGoat.X = -1;
+                    pieceTransition = false;
+                }
+            }else if (((pieceXDirection==1) == (fromPosition.X >= toPosition.X)) && ((pieceYDirection==1) == (fromPosition.Y >= toPosition.Y)))
             {
                 pieceTransition = false;
                 capGoat.X = -1;
@@ -1447,9 +1466,56 @@ namespace GoatTiger
         {
             currentPiece = currentBoard.mTurnForPlayer ?nodeState.tiger:nodeState.goat;
 
+            pieceTo.X = -1;
+            pieceTo.Y = -1;
+            capGoat.X = -1;
+            capGoat.Y = -1;
+            dropGoat.Y = -1;
+
             if (currentBoard.mGoatsIntoBoard < 15 && !currentBoard.mTurnForPlayer)
             {
-                pieceTransition = false;
+                System.Diagnostics.Debug.WriteLine("goats turn-------------------");
+                //find diff of position
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 6; j++)
+                    {
+                        if (currentBoard.mValues[i, j] == next.mValues[i, j])
+                        {
+
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("++++++++++++++++++++++++++prev value:" + currentBoard.mValues[i, j] + "new value: " + next.mValues[i, j] + "chaange i:" + i + "j:" + j);
+
+
+                            if (currentBoard.mValues[i, j] == nodeState.none && next.mValues[i, j] == currentPiece)
+                            {
+                                System.Diagnostics.Debug.WriteLine("++++++++++++++++++++++++++prev ");
+                                    dropGoat.X = i;
+                                    dropGoat.Y = j;
+                                    System.Diagnostics.Debug.WriteLine("++++++++++++++++++++++++++prev value x:"+dropGoat.X+"y:"+dropGoat.Y);
+                            }
+
+                        }
+                    }
+
+                }
+
+                
+                transitionSeconds = 0.0f;
+
+                if (dropGoat.X != -1)
+                {
+                    capGoatPosition = getGridPosition((int)dropGoat.X, (int)dropGoat.Y);
+                    capGoatscale.X = 1.5f;
+                    capGoatscale.Y = 1.5f;
+                    capGoatAlpha = 255;
+                }
+
+
+                //toPosition = pieceVelocity.Normalize();
+                pieceTransition = true;
                 return;
             }
 
@@ -1466,7 +1532,6 @@ namespace GoatTiger
                     {
                         System.Diagnostics.Debug.WriteLine("prev value:" + currentBoard.mValues[i, j] + "new value: " + next.mValues[i, j] + "chaange i:" + i + "j:" + j);
 
-                        
 
                         if (currentBoard.mValues[i, j] == currentPiece || next.mValues[i, j] == currentPiece)
                         {
@@ -1734,6 +1799,9 @@ namespace GoatTiger
                                             Board next = currentBoard.MakeMove(new Point(i, j), new Point(i, j));
                                             gameState.positionslist.Add(currentBoard.mValues);
                                             gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
+
+                                            pieceTransitionStarter(next);
+
                                             currentBoard = next;
                                             newMoveDone = true;
                                             prevTotSeconds = gameTime.TotalGameTime.TotalSeconds;
@@ -2116,16 +2184,28 @@ namespace GoatTiger
             Vector2 origin = new Vector2(goatpuck.Width / 2, goatpuck.Height / 2);
             Texture2D transPiece = currentPiece== nodeState.tiger?tigerpuck:goatpuck;
 
-            spriteBatch.Draw(transPiece, fromPosition, null, Color.White, 0f, origin, new Vector2(1, 1), SpriteEffects.None, 0f);
+            
 
             //Vector2 scaleFactor = new Vector2(0.5, 0.5);
             
             //Vector2 origin = new Vector2( capGoatscale.X,  capGoatscale.Y);
             //Vector2 origin = new Vector2(4, 4) * capGoatscale;
-            if (capGoat.X != -1)
+            if (dropGoat.X != -1)
             {
+                System.Diagnostics.Debug.WriteLine("drop goat draw****************");
                 spriteBatch.Draw(goatpuck, capGoatPosition, null, new Color(255, 255, 255, capGoatAlpha), 0f, origin, capGoatscale, SpriteEffects.None, 0f);
             }
+            else
+            {
+                spriteBatch.Draw(transPiece, fromPosition, null, Color.White, 0f, origin, new Vector2(1, 1), SpriteEffects.None, 0f);
+                if (capGoat.X != -1)
+                {
+             
+                    spriteBatch.Draw(goatpuck, capGoatPosition, null, new Color(255, 255, 255, capGoatAlpha), 0f, origin, capGoatscale, SpriteEffects.None, 0f);
+                }
+            }
+            
+            
         }
         void DrawPieces(){
 
