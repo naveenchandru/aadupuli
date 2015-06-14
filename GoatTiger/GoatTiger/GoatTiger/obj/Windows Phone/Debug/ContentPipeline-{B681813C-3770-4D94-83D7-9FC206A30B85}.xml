@@ -640,6 +640,15 @@
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\SpriteFont1.xnb</Output>
       <Time>2015-05-24T23:32:35.6907962+05:30</Time>
     </Item>
+    <Item>
+      <Source>previousPuck.png</Source>
+      <Name>previousPuck</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\previousPuck.xnb</Output>
+      <Time>2015-06-14T17:06:39.5085296+05:30</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{B681813C-3770-4D94-83D7-9FC206A30B85}</ContentProjectGUID>

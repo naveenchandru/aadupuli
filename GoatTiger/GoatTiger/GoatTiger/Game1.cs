@@ -44,7 +44,7 @@ namespace GoatTiger
 
         Texture2D tigerpuck;
         Texture2D goatpuck;
-        Texture2D nonepuck;
+        Texture2D nonepuck,prevHighlight;
         Texture2D boardtexture;
         Texture2D mainMenuBackground, tigersTurnText, goatsTurnText;
 
@@ -60,7 +60,7 @@ namespace GoatTiger
         nodeState winner;
         bool newMoveDone;
         bool puckTouched;
-        Point touchedPos;
+        Point touchedPos,higPos;
         gameMode currentMode;
         bool touching;
         gameScreens currentScreen,nextScreen;
@@ -92,7 +92,7 @@ namespace GoatTiger
         bool pieceTransition=false;
         nodeState pieceInTransition = nodeState.tiger;
         Vector2 fromPosition,toPosition;
-        Vector2 capGoatPosition, capGoatscale=new Vector2();
+        Vector2 capGoatPosition, capGoatscale=new Vector2(),prevPiecePosition;
         int capGoatAlpha = 0;
 
         Vector2 pieceFrom = new Vector2(), pieceTo = new Vector2(), pieceVelocity = new Vector2(),pieceDirection= new Vector2(),capGoat=new Vector2(-1,-1),dropGoat=new Vector2(-1,-1);
@@ -512,6 +512,7 @@ namespace GoatTiger
             tigerpuck = Content.Load<Texture2D>("tigerpuck");
             goatpuck = Content.Load<Texture2D>("goatpuck");
             nonepuck = Content.Load<Texture2D>("none");
+            prevHighlight = Content.Load<Texture2D>("previousPuck");
             boardtexture = Content.Load<Texture2D>("GamePlayBoard");
             mainMenuBackground = Content.Load<Texture2D>("mainmenuscreen");
 
@@ -1561,6 +1562,7 @@ namespace GoatTiger
 
             fromPosition = getGridPosition((int)pieceFrom.X, (int)pieceFrom.Y);
             toPosition = getGridPosition((int)pieceTo.X, (int)pieceTo.Y);
+            prevPiecePosition = getGridPosition((int)pieceFrom.X, (int)pieceFrom.Y);
             pieceVelocity = (toPosition - fromPosition);
             transitionSeconds = 0.0f;
             pieceXDirection = fromPosition.X > toPosition.X ? -1 : 1;
@@ -1719,6 +1721,7 @@ namespace GoatTiger
                                         if (grid[i, j] == nodeState.tiger)
                                         {
                                             puckTouched = true;
+                                            higPos = touchedPos;
                                             foreach (var move in currentBoard.GetShortMovesForTigerPuck(currentBoard.mValues, new Point(i, j)))
                                             {
                                                 System.Diagnostics.Debug.WriteLine("possible pos:" + move.X + move.Y + "puck" + grid[i, j]);
@@ -1785,7 +1788,7 @@ namespace GoatTiger
                                         touchedPos = new Point(i, j);
                                         if (currentBoard.mGoatsIntoBoard == 15 && grid[i, j] == nodeState.goat)
                                         {
-                                            
+                                            higPos = touchedPos;
                                             foreach (var move in currentBoard.GetMovesForGoatPuck(currentBoard.mValues, new Point(i, j)))
                                             {
                                                 System.Diagnostics.Debug.WriteLine("possible pos:" + move.X + move.Y + "puck" + grid[i, j]);
@@ -1796,6 +1799,7 @@ namespace GoatTiger
                                         }
                                         else if (currentBoard.mGoatsIntoBoard < 15 && grid[i, j] == nodeState.none)
                                         {
+                                            //higPos = touchedPos;
                                             Board next = currentBoard.MakeMove(new Point(i, j), new Point(i, j));
                                             gameState.positionslist.Add(currentBoard.mValues);
                                             gameState.mGoatsIntoBoardList.Add(currentBoard.mGoatsIntoBoard);
@@ -1991,11 +1995,18 @@ namespace GoatTiger
             {
                 DrawBoard();
 
-                DrawPieces();
+                
+                
                 if (pieceTransition)
                 {
                     DrawTransitionPieces();
                 }
+                //else
+                //{
+                //    DrawPrevPieces();
+                //}
+
+                DrawPieces();
                 DrawGoatsCount();
                 DrawPlayerTurn();
 
@@ -2178,6 +2189,14 @@ namespace GoatTiger
 
         }
 
+        void DrawPrevPieces()
+        {
+            Vector2 origin = new Vector2(prevHighlight.Width / 2, prevHighlight.Height / 2);
+            System.Diagnostics.Debug.WriteLine("Transition pieces:" + prevPiecePosition.X +"prev y:"+ prevPiecePosition.Y);
+            spriteBatch.Draw(prevHighlight, prevPiecePosition, null, Color.White, 0f, origin, new Vector2(1, 1), SpriteEffects.None, 0f);
+            spriteBatch.Draw(prevHighlight, toPosition, null, Color.White, 0f, origin, new Vector2(1, 1), SpriteEffects.None, 0f);
+        }
+
         void DrawTransitionPieces()
         {
             System.Diagnostics.Debug.WriteLine("Transition pieces");
@@ -2211,6 +2230,15 @@ namespace GoatTiger
 
             Rectangle position;
             grid = currentBoard.mValues;
+
+            if (puckTouched)
+            {
+                Vector2 origin = new Vector2(prevHighlight.Width / 2, prevHighlight.Height / 2);
+                Vector2 ptouchedPos = getGridPosition(higPos.X, higPos.Y);
+                spriteBatch.Draw(prevHighlight, ptouchedPos, null, Color.White, 0f, origin, new Vector2(1, 1), SpriteEffects.None, 0f);
+                //spriteBatch.Draw(prevHighlight, position, new Color(100,100,100,150));
+            }
+
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 6; j++)
@@ -2256,6 +2284,8 @@ namespace GoatTiger
                 position = GetGridSpace(poi.X, poi.Y, goatpuck.Width, goatpuck.Height);
                 spriteBatch.Draw(nonepuck, position, Color.Blue);
             }
+
+            
         }
         private Rectangle GetGridSpace(int row, int column, int width, int height)
         {
