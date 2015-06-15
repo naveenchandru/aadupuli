@@ -44,7 +44,7 @@ namespace GoatTiger
 
         Texture2D tigerpuck;
         Texture2D goatpuck;
-        Texture2D nonepuck,prevHighlight;
+        Texture2D nonepuck, prevHighlight, goatHighlight, tigerHighlight;
         Texture2D boardtexture;
         Texture2D mainMenuBackground, tigersTurnText, goatsTurnText;
 
@@ -162,13 +162,13 @@ namespace GoatTiger
             helpSection = new ScrollContainer();
             creditsection = new CreditsSection();
 
-            onePlayerBtnGoat = new gButton(470, 120);
-            onePlayerBtnTiger = new gButton(490, 220);
-            twoPlayerBtn = new gButton(465,320);
+            onePlayerBtnGoat = new gButton(470, 97);
+            onePlayerBtnTiger = new gButton(485, 197);
+            twoPlayerBtn = new gButton(475,297);
             settingsBtn = new gButton(555,20);
             helpBtn = new gButton(480, 20);
             creditsBtn = new gButton(630, 20);
-            rateBtn = new gButton(10, 10);
+            rateBtn = new gButton(465, 400);
 
             sfxOnBtn = new gButton(380,175);
             sfxOffBtn = new gButton(380,175);
@@ -433,8 +433,10 @@ namespace GoatTiger
             currentBoard = new Board();
             goatsCaptured = currentBoard.mGoatsIntoBoard - getGoatCount();
             gameState.positionslist.Clear();
+            puckTouched = false;
             gameState.mGoatsIntoBoardList.Clear();
             DeleteCurrentSavedFile();
+
         }
 
         void stashCurrentGame()
@@ -513,6 +515,8 @@ namespace GoatTiger
             goatpuck = Content.Load<Texture2D>("goatpuck");
             nonepuck = Content.Load<Texture2D>("none");
             prevHighlight = Content.Load<Texture2D>("previousPuck");
+            goatHighlight = Content.Load<Texture2D>("goatpuckHighlight");
+            tigerHighlight = Content.Load<Texture2D>("tigerpuckHighlight");
             boardtexture = Content.Load<Texture2D>("GamePlayBoard");
             mainMenuBackground = Content.Load<Texture2D>("mainmenuscreen");
 
@@ -779,6 +783,7 @@ namespace GoatTiger
                 {
                     resetPause();
                     possiblePositions.Clear();
+                    puckTouched = false;
                     currentScreen = gameScreens.pauseOverlay;
                 }
                 else if (currentScreen == gameScreens.pauseOverlay)
@@ -2233,9 +2238,18 @@ namespace GoatTiger
 
             if (puckTouched)
             {
-                Vector2 origin = new Vector2(prevHighlight.Width / 2, prevHighlight.Height / 2);
-                Vector2 ptouchedPos = getGridPosition(higPos.X, higPos.Y);
-                spriteBatch.Draw(prevHighlight, ptouchedPos, null, Color.White, 0f, origin, new Vector2(1, 1), SpriteEffects.None, 0f);
+                if (currentBoard.mTurnForPlayer)
+                {
+                    Vector2 origin = new Vector2(tigerHighlight.Width / 2, tigerHighlight.Height / 2);
+                    Vector2 ptouchedPos = getGridPosition(higPos.X, higPos.Y);
+                    spriteBatch.Draw(tigerHighlight, ptouchedPos, null, Color.White, 0f, origin, new Vector2(1, 1), SpriteEffects.None, 0f);
+                }
+                else
+                {
+                    Vector2 origin = new Vector2(goatHighlight.Width / 2, goatHighlight.Height / 2);
+                    Vector2 ptouchedPos = getGridPosition(higPos.X, higPos.Y);
+                    spriteBatch.Draw(goatHighlight, ptouchedPos, null, Color.White, 0f, origin, new Vector2(1, 1), SpriteEffects.None, 0f);
+                }
                 //spriteBatch.Draw(prevHighlight, position, new Color(100,100,100,150));
             }
 

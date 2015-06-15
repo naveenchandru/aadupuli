@@ -649,6 +649,24 @@
       <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\previousPuck.xnb</Output>
       <Time>2015-06-14T17:06:39.5085296+05:30</Time>
     </Item>
+    <Item>
+      <Source>goatpuckHighlight.png</Source>
+      <Name>goatpuckHighlight</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\goatpuckHighlight.xnb</Output>
+      <Time>2015-06-14T23:46:19.9760495+05:30</Time>
+    </Item>
+    <Item>
+      <Source>tigerpuckHighlight.png</Source>
+      <Name>tigerpuckHighlight</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>F:\Github-repo\aadupuli\aadupuli\GoatTiger\GoatTiger\GoatTiger\bin\Windows Phone\Debug\Content\tigerpuckHighlight.xnb</Output>
+      <Time>2015-06-14T23:49:11.0642781+05:30</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{B681813C-3770-4D94-83D7-9FC206A30B85}</ContentProjectGUID>
